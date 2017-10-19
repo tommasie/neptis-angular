@@ -10,6 +10,7 @@ import {RegisterComponent}        from './register.component';
 //Routes
 import { LoginRoutingModule } from './login-routing.module'
 import {AuthenticationService}        from '../services/authentication.service';
+import {RegisterService}  from '../services/register.service';
 
 @NgModule({
   declarations:[
@@ -22,7 +23,7 @@ import {AuthenticationService}        from '../services/authentication.service';
     HttpClientModule,
     LoginRoutingModule,
   ],
-  providers: [AuthenticationService]
+  providers: [AuthenticationService, RegisterService]
 })
 
 export class LoginModule {}

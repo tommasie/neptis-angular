@@ -1,54 +1,69 @@
-<div class="col-md-6 col-md-offset-3" align="center">
+<div class="container">
+	<div class="col-md-6 col-md-offset-3" align="center">
 
-	<div style="margin-top: 100px; margin-bottom: 20px;">
-		<h1 style="padding-rigth: 20px;">
-			<b>
-				<img src="../assets/colosseo.png" style="width: 60px; height: 60px;">
-				Neptis Planner
-			</b>
-		</h1>
+		<div style="margin-top: 100px; margin-bottom: 20px;">
+			<h1 style="padding-rigth: 20px;">
+				<b>
+					<img src="../assets/colosseo.png" style="width: 60px; height: 60px;">
+					Neptis Planner
+				</b>
+			</h1>
+		</div>
+
+		<div style="margin-bottom: 30px;">
+	   		<h4><b>Inserisci le informazioni richieste</b></h4>
+	   	</div>
+
+	    <form name="form" #f="ngForm" role="form" (ngSubmit)="register()">
+
+	    	<div class="form-group">
+		    	<label for="organization" style="float:left">Organizzazione</label>
+				<select class="form-control" id="organization" [(ngModel)]="organizzazione" name="organization">
+					<<option *ngFor="let org of organizations" [ngValue]="organizzazione">{{org.name}}</option>
+				</select>
+	    	</div>
+
+			<div class="form-inline">
+		    	<label for="city">Città</label>
+				<div class="row" id="city">
+					<div class="col-md-6">
+						<select class="form-control" [(ngModel)]="region" (ngModelChange)="onRegionSelected($event)" name="region">
+							<option *ngFor="let region of regions" [ngValue]="region">{{region}}</option>
+						</select>
+					</div>
+					<div class="col-md-6">
+						<select class="form-control" [(ngModel)]="city" name="city">
+							<option *ngFor="let city of cityList" [ngValue]="city">{{city.nome}}</option>
+						</select>
+					</div>
+				</div>
+	    	</div>
+
+	    	<div class="form-group">
+	            <label for="email" style="float:left">E-mail</label>
+	            <input [(ngModel)]="email" #name="ngModel" type="email" name="email" id="email" class="form-control" required email/>
+	        </div>
+
+	    	<div class="form-group">
+	            <label for="password" style="float:left">Password</label>
+	            <input [(ngModel)]="password" type="password" name="password" id="password" class="form-control" required />
+	        </div>
+
+	        <div class="form-group" [ngClass]="{'has-error': !verifyPassword()}">
+	            <label for="repassword" style="float:left">Reinserisci Password</label>
+	            <input [(ngModel)]="confirmPassword" type="password" name="confirmPassword" id="repassword" class="form-control" required />
+	        </div>
+
+	    	<div class="form-actions" style="margin-top: 50px; ">
+					<button type="submit" [disabled]="!f.valid" class="btn btn-primary">Registrati</button>
+					<img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+	      </div>
+
+	    	<div class="form-actions">
+	            <a [routerLink]="['/login']" class="btn btn-link">Annulla</a>
+	        </div>
+
+	    </form>
+
 	</div>
-
-	<div style="margin-bottom: 30px;">
-   		<h4><b>Inserisci le informazioni richieste</b></h4>
-   	</div>
-
-    <form name="form" #f="ngForm" role="form">
-
-    	<div class="form-group">
-	    	<label for="organization" style="float:left">Organizzazione</label>
-			<select class="form-control" id="organization" ng-model="vm.user.organization" name="organization" ng-options="option as option.name for option in organizations" required></select>
-    	</div>
-
-    	<div class="form-group" ng-class="{ 'has-error': form.orgname.$dirty && form.orgname.$error.required }" ng-show="showOrganizationName">
-            <label for="orgname" style="float:left">Nome dell'organizzazione</label>
-            <input type="text" name="orgname" id="orgname" class="form-control" ng-model="vm.user.orgname" required/>
-        </div>
-
-    	<div class="form-group" [ngClass]="{ 'has-error': true }">
-            <label for="email" style="float:left">E-mail</label>
-            <input [(ngModel)]="email" #name="ngModel" type="text" name="email" id="email" class="form-control" required />
-        </div>
-
-    	<div class="form-group" ng-class="{ 'has-error': form.password.$dirty && form.password.$error.required }">
-            <label for="password" style="float:left">Password</label>
-            <input [(ngModel)]="password" type="password" name="password" id="password" class="form-control" required />
-        </div>
-
-        <div class="form-group" ng-class="{ 'has-error': form.repassword.$dirty && form.repassword.$error.required }">
-            <label for="repassword" style="float:left">Reinserisci Password</label>
-            <input [(ngModel)]="confirmPassword" type="password" name="confirmPassword" id="repassword" class="form-control" required />
-        </div>
-
-    	<div class="form-actions" style="margin-top: 50px; ">
-				<button type="submit" [disabled]="!f.form.valid" class="btn btn-primary" (click)="click()" >Registrati</button>
-				<img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
-      </div>
-
-    	<div class="form-actions">
-            <a [routerLink]="['/login']" class="btn btn-link">Annulla</a>
-        </div>
-
-    </form>
-
 </div>
