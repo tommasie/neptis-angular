@@ -1,0 +1,69 @@
+<div class="panel panel-primary" style="margin-top:30px;">
+  <div class="panel-heading">
+    <h3 class="panel-title">Mappa delle attrazioni</h3>
+  </div>
+  <div class="panel-body">
+    <agm-map  [latitude]="lat"
+              [longitude]="lng"
+              [zoom]="13"
+              (mapClick) = "mapclick($event)">
+      <agm-marker *ngFor="let m of markers" [latitude]="m.lat" [longitude]="m.lng"></agm-marker>
+      <agm-circle *ngFor="let c of circles"
+        [latitude]="c.lat" [longitude]="c.lng" [radius]="c.radius" [editable]="true"
+        (radiusChange)="rChange(c, $event)"></agm-circle>
+    </agm-map>
+  </div>
+</div>
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">Attrazioni all'aperto</h3>
+  </div>
+  <div class="panel-body">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Nome</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let attraction of attractions">
+          <td>{{ attraction['name'] }}<td>
+          <td align="right">
+            <button class="btn btn-xs btn-default">
+              <span class="glyphicon glyphicon-map-marker"></span>
+              Guarda su mappa
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">Musei</h3>
+  </div>
+  <div class="panel-body">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Nome</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let museum of museums">
+          <td>{{ museum['name'] }}<td>
+            <td align="right">
+              <button class="btn btn-xs btn-default">
+                <span class="glyphicon glyphicon-map-marker"></span>
+                Guarda su mappa
+              </button>
+            </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,33 @@
+<div align="center">
+  <h1>Modifica dell'attrazione</h1>
+</div>
+
+<form #form="ngForm">
+  <div class="form-group">
+    <label for="name">Nome</label>
+    <div class="input-group">
+      <input [(ngModel)]="attraction.name" name="name" type="text" class="form-control" readonly required>
+      <span class="input-group-btn">
+        <button class="btn btn-secondary" type="button">
+          <span class="glyphicon glyphicon-edit"></span>
+        </button>
+      </span>
+    </div>
+  </div>
+
+  <agm-map  [latitude]="attraction.latitude"
+            [longitude]="attraction.longitude"
+            [zoom]="13"
+            (mapClick) = "mapclick($event)"
+            style="height: 400px;">
+    <agm-circle
+      [latitude]="attraction.latitude" [longitude]="attraction.longitude" [radius]="attraction.radius" [editable]="true" [draggable]="true"
+      (radiusChange)="rChange(attraction, $event)" (drag)="drag(attraction,event)"></agm-circle>
+  </agm-map>
+   <image-upload
+    [buttonCaption]="'Aggiungi immagine dell\'attrazione'"></image-upload>
+   <div align="center" style="margin-top:20px;">
+     <button class="btn btn-success" (click)="finish()">Modifica</button>
+     <button class="btn btn-danger" [routerLink]="['new']">Annulla</button>
+   </div>
+</form>

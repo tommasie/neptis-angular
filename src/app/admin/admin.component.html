@@ -1,0 +1,32 @@
+<div class="double-column" align="left">
+
+	<form name="form" role="form">
+		<div class="col-md-3">
+
+			<button type="button" class="btn btn-primary btn-lg btn-block side-btn" [routerLink]="['/home']" [routerLinkActive]="['active']">
+				Home
+			</button>
+
+			<button type="button" class="btn btn-primary btn-lg btn-block side-btn" [routerLink]="['attractions']" [routerLinkActive]="['active']">
+				Attrazioni
+			</button>
+			<!-- <div class='sub_container' align="center" [hidden]="vm.Cards_subButtons">
+				<button id="addCard" type="button" class="btn sub-btn btn-success" ng-click="vm.addCard();">Add a Card</button>
+				<button id="delCard" type="button" class="btn sub-btn btn-danger" ng-click="vm.delCard();">Delete a Card</button>
+			</div> -->
+
+
+			<button type="button" class="btn btn-primary btn-lg btn-block side-btn" [routerLink]="['museums']" [routerLinkActive]="['active']">
+				Musei
+			</button>
+			<!-- <div class='sub_container' align="center" [hidden]="vm.Missions_subButtons">
+				<button id="addMission" type="button" class="btn sub-btn btn-success" ng-click="vm.addMission();">Add a Mission</button>
+			</div> -->
+
+		</div>
+		<div class="col-md-9">
+			<router-outlet></router-outlet>
+		</div>
+
+	</form>
+</div>

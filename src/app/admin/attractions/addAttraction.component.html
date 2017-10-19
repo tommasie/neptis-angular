@@ -1,0 +1,28 @@
+<div align="center">
+  <h1>Aggiunta di una nuova attrazione</h1>
+</div>
+
+<form #form="ngForm">
+  <div class="form-group">
+    <label for="name" style="float:left">Nome</label>
+    <input [(ngModel)]="attraction.name" name="name" type="text" class="form-control" required />
+  </div>
+  <p align="center"> Seleziona il sito dell'attrazione sulla mappa e aggiustane
+    i confini tenendo premuto sulla circonferenza e trascinando il mouse </p>
+
+  <agm-map  [latitude]="lat"
+            [longitude]="lng"
+            (mapClick) = "mapclick($event)"
+            style="height: 400px;">
+    <agm-circle
+      [latitude]="circ.lat" [longitude]="circ.lng" [radius]="circ.radius" [editable]="true"
+      (radiusChange)="rChange(circ, $event)"></agm-circle>
+  </agm-map>
+
+   <image-upload
+    [buttonCaption]="'Aggiungi immagine dell\'attrazione'"></image-upload>
+   <div align="center" style="margin-top:20px;">
+     <button class="btn btn-success" (click)="finish()">Aggiungi</button>
+     <button class="btn btn-danger" [routerLink]="['new']">Annulla</button>
+   </div>
+</form>

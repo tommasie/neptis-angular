@@ -1,0 +1,90 @@
+<div align="center">
+  <h1>Aggiunta di un nuovo museo</h1>
+</div>
+
+<form #form="ngForm">
+  <div class="form-group">
+    <label for="name" style="float:left">Nome del museo</label>
+    <input [(ngModel)]="museum.name" name="name" type="text" class="form-control" required />
+  </div>
+  <p align="center" style="margin-top:20px;margin-bottom:20px">Inserisci la varie sale che compongono il museo, dopodiché seleziona una sala dalla
+    lista per aggiungere le attrazioni e le sale adiacenti</p>
+  <div class="row">
+    <div class="col-md-4">
+      <div class="form-group">
+        <label for="areaName" style="float:left">Nome sala</label>
+        <input [(ngModel)]="areaName" name="areaName" type="text" class="form-control" required />
+        <table class="table">
+          <tr>
+            <th>Lista delle sale</th>
+          </tr>
+          <tr *ngFor="let area of museum.rooms" (click)="selectArea(area)" [ngClass]="{'info':area==selectedArea, 'default':area!=selectedArea}">
+            <td>{{area.name}}</td>
+          </tr>
+        </table>
+        <div align="center">
+          <button class="btn btn-primary" (click)="addRoom()">Aggiungi</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        <label for="attractionName" style="float:left">Nome dell'attrazione</label>
+        <input [(ngModel)]="attractionName" name="attractionName" type="text" class="form-control" required />
+        <table class="table">
+          <tr>
+            <th>Lista delle attrazioni</th>
+          </tr>
+          <tr *ngFor="let attraction of selectedArea.attraction_ms">
+            <td>{{attraction.name}}</td>
+          </tr>
+        </table>
+        <div align="center">
+          <button class="btn btn-primary" [disabled]="selectedArea.name==undefined" (click)="addAttraction()">Aggiungi</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        <label style="float:left">Collegamenti</label>
+        <ng-select [allowClear]="true"
+              [items]="getRooms()"
+              [disabled]="selectedArea.name==undefined"
+              (selected)="addLink($event)">
+        </ng-select>
+        <table class="table">
+          <tr>
+            <th>Lista dei collegamenti</th>
+          </tr>
+          <tr *ngFor="let room of selectedArea.adjacent">
+            <td>{{room.name}}</td>
+          </tr>
+        </table>
+        <div align="center">
+          <button class="btn btn-primary" [disabled]="selectedArea.name==undefined" (click)="addLink()">Aggiungi</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div align="center">
+      <p style="margin-top:20px;margin-bottom:20px">Definisci la prima ed ultima sala del museo (possono coincidere)</p>
+    </div>
+    <div class="col-md-4 col-md-offset-4">
+      <ng-select
+            [items]="getRooms()"
+            (selected)="addStartRoom($event)">
+      </ng-select>
+    </div>
+    <div class="col-md-4 col-md-offset-4" style="margin-top:20px">
+      <ng-select
+            [items]="getRooms()"
+            (selected)="addStartRoom($event)">
+      </ng-select>
+    </div>
+  </div>
+   <div align="center" style="margin-top:20px;">
+     <button class="btn btn-success" (click)="finish()">Aggiungi</button>
+     <button class="btn btn-danger" [routerLink]="['/home','museums']">Annulla</button>
+   </div>
+</form>
