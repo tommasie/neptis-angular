@@ -2,8 +2,10 @@ import { BrowserModule }        from '@angular/platform-browser';
 import { NgModule }             from '@angular/core';
 import { FormsModule }          from '@angular/forms';
 import {HttpClientModule}       from '@angular/common/http';
+import { JwtModule }            from '@auth0/angular-jwt';
 import { RoutingModule }        from './routing.module';
-
+import {HTTP_INTERCEPTORS}      from '@angular/common/http';
+import {ForbiddenInterceptor}   from './interceptors/forbidden.interceptor';
 import { AgmCoreModule }        from '@agm/core';
 
 import { AppComponent }         from './app.component';
@@ -15,6 +17,13 @@ import {AdminModule}            from './admin/admin.module';
 import {AttractionModule}       from './admin/attractions/attraction.module';
 import {MuseumModule}           from './admin/museums/museum.module';
 
+export function tokenGetter() {
+    if(localStorage.getItem('curatoreCorrente')) {
+        return JSON.parse(localStorage.getItem('curatoreCorrente')).token;
+    }
+    return null;
+}
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -23,6 +32,12 @@ import {MuseumModule}           from './admin/museums/museum.module';
     BrowserModule,
     FormsModule,
     HttpClientModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter,
+        whitelistedDomains: ['localhost:9070']
+      }
+  }),
     AgmCoreModule.forRoot({apiKey: 'AIzaSyAqY3G_iymwda5bn9g87a4YwDPWu13gnw0'}),
     LoginModule,
     AdminModule,
@@ -31,7 +46,13 @@ import {MuseumModule}           from './admin/museums/museum.module';
     RoutingModule,
   ],
   providers: [AuthenticationService,
-                AuthGuard],
+            AuthGuard,
+            [{
+                provide: HTTP_INTERCEPTORS,
+                useClass: ForbiddenInterceptor,
+                multi: true,
+            }]
+            ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

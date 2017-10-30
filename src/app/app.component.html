@@ -6,9 +6,8 @@
         </div>
     <div class="collapse navbar-collapse">
         <ul class="nav navbar-nav navbar-right" [hidden]="!logged">
-            <li ng-show="showNotification"><a href=""><button type="button" class="btn {{notification}}" style="color: white; padding:2px; padding-left:8px; padding-right:8px; margin:-5px; border-radius: 20px;" ng-click="enable()"><b>{{notifications}}</b></button></a></li>
-            <li><a href="" style="color: white; cursor: default; pointer-events: none;"><span class="glyphicon glyphicon-user"></span> Logged as {{ username }}</a></li>
-            <li><a (click)="click()"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+            <li><a href="" style="color: white; cursor: default; pointer-events: none;"><span class="glyphicon glyphicon-user"></span>Utente connesso: {{ username }}</a></li>
+            <li><a (click)="logout()"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
         </ul>
       </div>
     </div>

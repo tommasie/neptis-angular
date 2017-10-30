@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import {Router} from '@angular/router';
 import {RegisterService} from '../services/register.service';
+import {AuthenticationService} from '../services/authentication.service';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -20,7 +22,9 @@ export class RegisterComponent implements OnInit {
     cityList: object[] = [];
 
 
-  constructor(private service : RegisterService) { }
+  constructor(private service : RegisterService,
+            private auth: AuthenticationService,
+            private router: Router) { }
 
   ngOnInit() {
       this.loadCities();
@@ -53,11 +57,26 @@ export class RegisterComponent implements OnInit {
   }
 
   register(): void {
-      console.log(this.organizzazione);
       console.log(this.region);
       console.log(this.city);
       console.log(this.email);
       console.log(this.password);
+
+      let password = this.auth.encryptPassword(this.password);
+      this.auth.register({
+          region: this.region,
+          city: this.city['nome'],
+          email: this.email,
+          password: password
+      }).subscribe(data => {
+          console.log(data);
+          let token = data['token'];
+          if(token) {
+            localStorage.setItem('curatoreCorrente',JSON.stringify(data));
+          }
+          this.auth.subject.next(true);
+          this.router.navigate(['/home']);
+      }, error => console.log(error));
   }
 
 }

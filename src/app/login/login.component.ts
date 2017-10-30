@@ -12,9 +12,7 @@ export class LoginComponent implements OnInit {
 
     email: string;
     password: string;
-    valid: boolean = true;
     loading = false;
-    returnUrl: string;
 
   constructor(private auth: AuthenticationService, private router: Router) {
     }
@@ -22,14 +20,21 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
   }
 
-
   click(): void {
       this.loading = true;
-      console.log(this.email + " " + this.password);
       let pw = this.auth.encryptPassword(this.password);
-      console.log(this.email + " " + pw);
       this.auth.login(this.email, pw)
-        .subscribe(data => {this.router.navigate(['/home'])}, error => console.log(error));
+        .subscribe(data => {
+            this.loading = false;
+            let token = data['token'];
+            if(token) {
+              localStorage.setItem('curatoreCorrente',JSON.stringify(data));
+            }
+            this.auth.subject.next(true);
+            this.router.navigate(['/home']);
+        }, error => {
+            console.log(error);
+        });
   }
 
   isValid(): boolean {

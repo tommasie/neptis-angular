@@ -3,14 +3,8 @@
     <h3 class="panel-title">Mappa delle attrazioni</h3>
   </div>
   <div class="panel-body">
-    <agm-map  [latitude]="lat"
-              [longitude]="lng"
-              [zoom]="13"
-              (mapClick) = "mapclick($event)">
+    <agm-map  [latitude]="lat" [longitude]="lng" [zoom]="zoom" [usePanning]='true'>
       <agm-marker *ngFor="let m of markers" [latitude]="m.lat" [longitude]="m.lng"></agm-marker>
-      <agm-circle *ngFor="let c of circles"
-        [latitude]="c.lat" [longitude]="c.lng" [radius]="c.radius" [editable]="true"
-        (radiusChange)="rChange(c, $event)"></agm-circle>
     </agm-map>
   </div>
 </div>
@@ -31,7 +25,7 @@
         <tr *ngFor="let attraction of attractions">
           <td>{{ attraction['name'] }}<td>
           <td align="right">
-            <button class="btn btn-xs btn-default">
+            <button class="btn btn-xs btn-default" (click)="setLatLng(attraction)">
               <span class="glyphicon glyphicon-map-marker"></span>
               Guarda su mappa
             </button>

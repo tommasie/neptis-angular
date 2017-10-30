@@ -34,4 +34,13 @@ export class AttractionsComponent implements OnInit {
     this.selectedAttraction = attraction;
     this.selected = true;
   }
+
+  delete(attraction: Attraction) {
+      let result = confirm("Vuoi veramente eliminare l'attrazione \"" + attraction.name + "\"?");
+      if(result) {
+          this.service.deleteCityAttraction(attraction.id).subscribe(res => {
+              console.log(res);
+          });
+      }
+  }
 }

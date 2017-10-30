@@ -10,7 +10,7 @@ export class AttractionService {
   museums: Museum[] = [];
   attractions: Attraction[] = [];
 
-  private host = "http://localhost:5001/admin";
+  private host = "http://localhost:9070/admin";
 
   constructor(private http: HttpClient) {
   }
@@ -23,13 +23,13 @@ export class AttractionService {
     return this.http.get<Attraction>(this.host + "/attractionc/" + id);
   }
 
-  addCityAttraction(attraction: Attraction) {
+  addCityAttraction(attraction: Attraction):Observable<Attraction> {
     this.attractions.push(attraction);
-    this.http.post(this.host + "/attractionc", attraction).subscribe((res) => {console.log(res);});
+    return this.http.post<Attraction>(this.host + "/attractionc", attraction);
   }
 
-  editCityAttraction(attraction: Attraction) {
-    this.http.put(this.host + "/attractionc/" + attraction.id, attraction).subscribe();
+  editCityAttraction(attraction: Attraction): Observable<any> {
+    return this.http.put(this.host + "/attractionc/" + attraction.id, attraction, {responseType:'json'});
   }
 
   deleteCityAttraction(id: Number) {
@@ -54,10 +54,5 @@ export class AttractionService {
 
   deleteMuseum(museum:Museum) {
       this.http.delete(this.host + "/museums/" + museum.id).subscribe();
-  }
-
-  addAttraction(attraction: Attraction) {
-    this.attractions.push(attraction);
-    this.http.post(this.host + "/attractionc", attraction).subscribe((res) => {console.log(res);});
   }
 }

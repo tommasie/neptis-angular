@@ -5,56 +5,66 @@ import { AttractionService } from '../../services/attraction.service';
 import {Attraction} from '../../model/attraction';
 
 @Component({
-  selector: 'admin-attraction',
-  templateUrl: './editAttraction.component.html',
-  //styleUrls: ['./attraction.component.css']
+    selector: 'admin-attraction',
+    templateUrl: './editAttraction.component.html',
+    //styleUrls: ['./attraction.component.css']
 })
 
 export class EditAttractionComponent implements OnInit {
 
-  private attraction: Attraction;
-  private name: string;
-  private latitude: number;
-  private longitude: number;
+    private attraction: Attraction;
+    private name: string;
+    private latitude: number;
+    private longitude: number;
 
-  constructor(private route: ActivatedRoute,
-              private router: Router,
-              private service: AttractionService) {
-                this.attraction = new Attraction();
-              }
+    private readonly: boolean = true;
 
-  ngOnInit() {
-    this.route.paramMap
-    .switchMap((params: ParamMap) =>
-      this.service.getCityAttraction(+params.get('id')))
-      .subscribe(attraction => this.attraction = attraction);
-  }
+    constructor(private route: ActivatedRoute,
+        private router: Router,
+        private service: AttractionService) {
+            this.attraction = new Attraction();
+        }
 
-  mapclick(event) {
-    console.log(event);
-    this.attraction.latitude = event.coords.lat;
-    this.attraction.longitude = event.coords.lng;
-  }
+        ngOnInit() {
+            this.route.paramMap
+            .switchMap((params: ParamMap) =>
+            this.service.getCityAttraction(+params.get('id')))
+            .subscribe(attraction => this.attraction = attraction);
+        }
 
-  drag(m,event: MouseEvent) {
-    console.log(m);
-    console.log(event);
-  }
+        enableEdit() {
+            this.readonly = false;
+        }
 
-  rChange(attraction, event) {
-    console.log(attraction, event);
-    this.attraction.radius = event;
-  }
+        mapclick(event) {
+            console.log(event);
+            this.attraction.latitude = event.coords.lat;
+            this.attraction.longitude = event.coords.lng;
+        }
 
-  finish() {
-    //TODO PUT data to server
-    this.service.editCityAttraction(this.attraction);
-  }
+        drag(m,event: MouseEvent) {
+            console.log(m);
+            console.log(event);
+        }
 
-}
+        rChange(attraction, event) {
+            console.log(attraction, event);
+            this.attraction.radius = event;
+        }
 
-class Circle {
-  lat: number;
-  lng: number;
-  radius: number;
-}
+        finish() {
+            //TODO PUT data to server
+            this.service.editCityAttraction(this.attraction).subscribe(res => {
+                console.log(res);
+            }, err => {
+                console.log(err);
+            });
+        }
+
+    }
+
+    class Circle {
+        lat: number;
+        lng: number;
+        radius: number;
+    }

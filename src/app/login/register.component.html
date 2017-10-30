@@ -22,22 +22,21 @@
 					<<option *ngFor="let org of organizations" [ngValue]="organizzazione">{{org.name}}</option>
 				</select>
 	    	</div>
-
-			<div class="form-inline">
-		    	<label for="city">Città</label>
-				<div class="row" id="city">
-					<div class="col-md-6">
-						<select class="form-control" [(ngModel)]="region" (ngModelChange)="onRegionSelected($event)" name="region">
-							<option *ngFor="let region of regions" [ngValue]="region">{{region}}</option>
-						</select>
-					</div>
-					<div class="col-md-6">
-						<select class="form-control" [(ngModel)]="city" name="city">
-							<option *ngFor="let city of cityList" [ngValue]="city">{{city.nome}}</option>
-						</select>
-					</div>
+			<div class="row">
+				<div class="form-group col-md-6">
+			    	<label for="region" style="float:left">Regione</label>
+					<select class="form-control" [(ngModel)]="region" (ngModelChange)="onRegionSelected($event)" name="region" id="region">
+						<option *ngFor="let region of regions" [ngValue]="region">{{region}}</option>
+					</select>
 				</div>
-	    	</div>
+				<div class="form-group col-md-6">
+					<label for="city" style="float:left">Città</label>
+					<select class="form-control" [(ngModel)]="city" name="city" id="city">
+						<option *ngFor="let city of cityList" [ngValue]="city">{{city.nome + " (" + city.sigla + ")"}}</option>
+					</select>
+		    	</div>
+			</div>
+
 
 	    	<div class="form-group">
 	            <label for="email" style="float:left">E-mail</label>
