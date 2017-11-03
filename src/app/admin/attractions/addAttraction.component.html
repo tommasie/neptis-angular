@@ -20,21 +20,9 @@
     </agm-map>
     <div class="form-group" style="margin-top:20px">
         <label for="description" style="float:left">Descrizione (opzionale)</label>
-        <textarea placeholder="Aggiung una descrizione dell'attrazione" [(ngModel)]="attraction.description"
+        <textarea placeholder="Aggiungi una descrizione dell'attrazione" [(ngModel)]="attraction.description"
         name="description" class="form-control">
         </textarea>
-    </div>
-    <div style="margin-top:20px;">
-        <label style="float:left">Foto (opzionale)</label><br/>
-        <image-upload [buttonCaption]="'Aggiungi immagine...'"
-                        [dropBoxMessage]="'...oppure sposta immagine qui'"
-                        [fileTooLargeMessage]="'L\'immagine è troppo pesante'"
-                        [clearButtonCaption]="'Elimina tutto'"
-                        [max]="1"></image-upload>
-    </div>
-    <div class="form-group">
-        <label for="img" style="float:left">Nome</label>
-        <input [(ngModel)]="img" name="img" type="file" class="form-control" (change)="fileChange($event)" />
     </div>
     <div align="center" style="margin-top:20px;">
         <button class="btn btn-success" (click)="finish()">Aggiungi</button>

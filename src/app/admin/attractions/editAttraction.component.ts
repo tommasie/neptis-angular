@@ -29,7 +29,12 @@ export class EditAttractionComponent implements OnInit {
             this.route.paramMap
             .switchMap((params: ParamMap) =>
             this.service.getCityAttraction(+params.get('id')))
-            .subscribe(attraction => this.attraction = attraction);
+            .subscribe(attraction => {
+                this.attraction = attraction;
+                this.attraction.latitude = +this.attraction.latitude;
+                this.attraction.longitude = +this.attraction.longitude;
+                console.log(this.attraction);
+            });
         }
 
         enableEdit() {
@@ -42,9 +47,10 @@ export class EditAttractionComponent implements OnInit {
             this.attraction.longitude = event.coords.lng;
         }
 
-        drag(m,event: MouseEvent) {
-            console.log(m);
-            console.log(event);
+        drag(m,$event: MouseEvent) {
+            console.log($event);
+            this.attraction.latitude = $event['lat'];
+            this.attraction.longitude = $event['lng'];
         }
 
         rChange(attraction, event) {

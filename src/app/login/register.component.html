@@ -16,12 +16,6 @@
 
 	    <form name="form" #f="ngForm" role="form" (ngSubmit)="register()">
 
-	    	<div class="form-group">
-		    	<label for="organization" style="float:left">Organizzazione</label>
-				<select class="form-control" id="organization" [(ngModel)]="organizzazione" name="organization">
-					<<option *ngFor="let org of organizations" [ngValue]="organizzazione">{{org.name}}</option>
-				</select>
-	    	</div>
 			<div class="row">
 				<div class="form-group col-md-6">
 			    	<label for="region" style="float:left">Regione</label>

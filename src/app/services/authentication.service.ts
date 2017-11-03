@@ -1,43 +1,65 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-
+import {Router} from '@angular/router';
 import { Observable } from 'rxjs';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/map'
 
-import * as CryptoJS from 'crypto-js';
+import { AngularFireAuth } from 'angularfire2/auth';
+import * as firebase from 'firebase/app';
+import {UserService} from './user.service';
+import {environment} from '../../environments/environment';
 
 @Injectable()
 export class AuthenticationService {
 
-  subject = new Subject<boolean>();
+    subject = new Subject<boolean>();
+    private url = environment.apiUrl;
+    token : string;
 
-  constructor(private http: HttpClient)  {
-  }
+    constructor(private http: HttpClient,
+        private auth: AngularFireAuth,
+        private router: Router,
+        private userService: UserService)  {
+        }
 
-  login(email: string, password: string): Observable<any> {
-    return this.http.post('http://localhost:9070/auth/admin', {email:email, password:password});
-  }
+        login2(email: string, password:string) {
+            this.auth.auth.signInWithEmailAndPassword(email, password)
+            .then(user => {
+                return user.getIdToken();
+            })
+            .then(token => {
+                this.userService.setToken(token);
+                this.router.navigate(['/home']);
+            }).catch(err => {
+                console.log(err);
+            });
+        }
 
-  logout(): void {
-    localStorage.removeItem('curatoreCorrente');
-    this.subject.next(false);
-  }
+        logout(): void {
+            this.auth.auth.signOut()
+            .then(() => {
+                this.router.navigate(['/login']);
+            }).catch(err => {
+                console.log(err);
+            })
+        }
 
-  getStatus(): Observable<any> {
-    return this.subject.asObservable();
-  }
+        register(data: object) {
+            this.auth.auth.createUserWithEmailAndPassword(data['email'], data['password'])
+            .then(user => {
+                return user.getIdToken();
+            })
+            .then(token => {
+                this.userService.setToken(token);
+                this.http.post(this.url + 'register', data)
+                .subscribe(data => {
+                    this.router.navigate(['/home']);
+                }, error => console.log(error));
+            })
+            .catch(err => {
+                console.log(err);
+            });
 
-  encryptPassword(password: string) : string {
-    let crypt = CryptoJS.SHA3(password).toString();
-    return crypt;
-  }
-
-  getToken() {
-      return JSON.parse(localStorage.getItem('curatoreCorrente')).token;
-  }
-
-  register(data: object): Observable<any> {
-      return this.http.post('http://localhost:9070/auth/register/admin', data);
-  }
-}
+        }
+    }

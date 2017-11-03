@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {Router} from '@angular/router';
 import {AuthenticationService} from './services/authentication.service';
 
+import {AngularFireAuth} from 'angularfire2/auth';
 
 @Component({
     selector: 'app-root',
@@ -14,12 +15,13 @@ export class AppComponent {
     logged: boolean;
     username: string;
 
-    constructor(private auth: AuthenticationService, private router: Router) {
-
-        this.auth.getStatus().subscribe(value => {
-            this.logged = value;
-            if(localStorage.getItem('curatoreCorrente') != undefined) {
-                this.username = JSON.parse(localStorage.getItem('curatoreCorrente')).email;
+    constructor(private auth: AuthenticationService, private router: Router, private firebase: AngularFireAuth) {
+        this.firebase.authState.subscribe(user => {
+            if(user == null) {
+                this.logged = false;
+            } else {
+                this.username = user.email;
+                this.logged = true;
             }
         });
     }

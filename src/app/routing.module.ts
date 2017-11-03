@@ -14,7 +14,7 @@ import {EditMuseumComponent}      from './admin/museums/editMuseum.component';
 import {AuthGuard}                from './guards/auth.guard';
 
 const appRoutes: Routes = [
-  { path: '**', redirectTo: '/login', pathMatch: 'full'}
+  { path: '**', redirectTo: '/home', pathMatch: 'full'}
 ];
 
 @NgModule({

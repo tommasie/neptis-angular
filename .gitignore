@@ -1,3 +1,4 @@
 e2e/
 dist/
 node_modules/
+.directory

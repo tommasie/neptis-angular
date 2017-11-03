@@ -20,20 +20,15 @@
         </textarea>
     </div>
 
-    <agm-map  [latitude]="attraction.latitude"
-    [longitude]="attraction.longitude"
-    [zoom]="18"
+    <agm-map  [latitude]="attraction.latitude" [longitude]="attraction.longitude" [zoom]="18"
     (mapClick) = "mapclick($event)"
     style="height: 400px;">
         <agm-circle
         [latitude]="attraction.latitude" [longitude]="attraction.longitude" [radius]="attraction.radius" [editable]="true" [draggable]="true"
-        (radiusChange)="rChange(attraction, $event)" (drag)="drag(attraction,event)"></agm-circle>
+        (radiusChange)="rChange(attraction, $event)" (centerChange)="drag(attraction,$event)"></agm-circle>
     </agm-map>
-    <div style="margin-top:20px;">
-        <image-upload [buttonCaption]="'Aggiungi immagine dell\'attrazione'"></image-upload>
-    </div>
     <div align="center" style="margin-top:20px;">
         <button class="btn btn-success" (click)="finish()">Modifica</button>
-        <button class="btn btn-danger" [routerLink]="['new']">Annulla</button>
+        <button class="btn btn-danger" [routerLink]="['/home','attractions']">Annulla</button>
     </div>
 </form>

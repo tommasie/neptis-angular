@@ -22,19 +22,7 @@ export class LoginComponent implements OnInit {
 
   click(): void {
       this.loading = true;
-      let pw = this.auth.encryptPassword(this.password);
-      this.auth.login(this.email, pw)
-        .subscribe(data => {
-            this.loading = false;
-            let token = data['token'];
-            if(token) {
-              localStorage.setItem('curatoreCorrente',JSON.stringify(data));
-            }
-            this.auth.subject.next(true);
-            this.router.navigate(['/home']);
-        }, error => {
-            console.log(error);
-        });
+      this.auth.login2(this.email, this.password);
   }
 
   isValid(): boolean {

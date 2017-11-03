@@ -2,27 +2,23 @@ import { BrowserModule }        from '@angular/platform-browser';
 import { NgModule }             from '@angular/core';
 import { FormsModule }          from '@angular/forms';
 import {HttpClientModule}       from '@angular/common/http';
-import { JwtModule }            from '@auth0/angular-jwt';
 import { RoutingModule }        from './routing.module';
+import { AngularFireModule }    from 'angularfire2';
+import { AngularFireAuthModule } from 'angularfire2/auth';
 import {HTTP_INTERCEPTORS}      from '@angular/common/http';
-import {ForbiddenInterceptor}   from './interceptors/forbidden.interceptor';
+import {TokenInterceptor}   from './interceptors/token.interceptor';
 import { AgmCoreModule }        from '@agm/core';
 
 import { AppComponent }         from './app.component';
 import {AuthenticationService}  from './services/authentication.service';
+import {UserService}           from './services/user.service';
 import {AuthGuard}              from './guards/auth.guard';
 
 import {LoginModule}            from './login/login.module';
 import {AdminModule}            from './admin/admin.module';
 import {AttractionModule}       from './admin/attractions/attraction.module';
 import {MuseumModule}           from './admin/museums/museum.module';
-
-export function tokenGetter() {
-    if(localStorage.getItem('curatoreCorrente')) {
-        return JSON.parse(localStorage.getItem('curatoreCorrente')).token;
-    }
-    return null;
-}
+import {environment}            from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -30,14 +26,10 @@ export function tokenGetter() {
   ],
   imports: [
     BrowserModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireAuthModule,
     FormsModule,
     HttpClientModule,
-    JwtModule.forRoot({
-      config: {
-        tokenGetter: tokenGetter,
-        whitelistedDomains: ['localhost:9070']
-      }
-  }),
     AgmCoreModule.forRoot({apiKey: 'AIzaSyAqY3G_iymwda5bn9g87a4YwDPWu13gnw0'}),
     LoginModule,
     AdminModule,
@@ -47,9 +39,10 @@ export function tokenGetter() {
   ],
   providers: [AuthenticationService,
             AuthGuard,
+            UserService,
             [{
                 provide: HTTP_INTERCEPTORS,
-                useClass: ForbiddenInterceptor,
+                useClass: TokenInterceptor,
                 multi: true,
             }]
             ],

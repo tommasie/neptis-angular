@@ -60,24 +60,15 @@ export class RegisterComponent implements OnInit {
       console.log(this.region);
       console.log(this.city);
       console.log(this.email);
-      console.log(this.password);
-
-      let password = this.auth.encryptPassword(this.password);
       this.auth.register({
           region: this.region,
           city: this.city['nome'],
           email: this.email,
-          password: password
-      }).subscribe(data => {
-          console.log(data);
-          let token = data['token'];
-          if(token) {
-            localStorage.setItem('curatoreCorrente',JSON.stringify(data));
-          }
-          this.auth.subject.next(true);
-          this.router.navigate(['/home']);
-      }, error => console.log(error));
+          password:this.password
+      });
   }
+
+
 
 }
 
