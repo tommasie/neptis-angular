@@ -21,7 +21,7 @@ export class AppComponent {
     constructor(private auth: AuthenticationService,
                 private router: Router,
                 private firebase: AngularFireAuth,
-                private notification: NotificationService) {
+                public notification: NotificationService) {
         this.firebase.authState.subscribe(user => {
             if(user == null) {
                 this.logged = false;

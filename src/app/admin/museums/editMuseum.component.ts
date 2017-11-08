@@ -12,11 +12,11 @@ import {Museum, Room, MuseumAttraction} from '../../model/museum';
 
 export class EditMuseumComponent implements OnInit {
 
-  private museum: Museum = new Museum();
-  private areaName: string;
-  private selectedArea: Room = new Room();
-  private attractionName: string;
-  private link: string;
+  museum: Museum = new Museum();
+  areaName: string;
+  selectedArea: Room = new Room();
+  attractionName: string;
+  link: string;
 
   constructor(private route: ActivatedRoute,
               private router: Router,

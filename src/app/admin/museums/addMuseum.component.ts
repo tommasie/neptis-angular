@@ -9,12 +9,12 @@ import {Museum, Room, MuseumAttraction} from '../../model/museum';
 
 export class AddMuseumComponent implements OnInit {
 
-    private museum: Museum = new Museum();
-    private museumName: string;
-    private areaName: string;
-    private selectedArea: Room = new Room();
-    private attractionName: string;
-    private link: string;
+    museum: Museum = new Museum();
+    museumName: string;
+    areaName: string;
+    selectedArea: Room = new Room();
+    attractionName: string;
+    link: string;
 
     constructor(private service: AttractionService) {}
 

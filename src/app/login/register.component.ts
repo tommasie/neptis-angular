@@ -11,6 +11,7 @@ export class RegisterComponent implements OnInit {
     email: string;
     password: string;
     confirmPassword: string;
+    loading: boolean = false;
 
     organizations: object;
     organizzazione: object;

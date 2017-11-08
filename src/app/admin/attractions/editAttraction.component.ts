@@ -12,12 +12,12 @@ import {Attraction} from '../../model/attraction';
 
 export class EditAttractionComponent implements OnInit {
 
-    private attraction: Attraction;
+    attraction: Attraction;
     private name: string;
     private latitude: number;
     private longitude: number;
 
-    private readonly: boolean = true;
+    readonly: boolean = true;
 
     constructor(private route: ActivatedRoute,
         private router: Router,
