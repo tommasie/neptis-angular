@@ -53,7 +53,6 @@ export class RegisterComponent implements OnInit {
 
   verifyPassword(): boolean {
       return this.password == this.confirmPassword && this.confirmPassword !== "";
-
   }
 
   register(): void {

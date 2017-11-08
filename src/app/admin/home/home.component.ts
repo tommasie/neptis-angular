@@ -13,8 +13,8 @@ import {Museum} from '../../model/museum';
 
 export class HomeComponent implements OnInit {
 
-    attractions: Attraction[];
-    museums: Museum[];
+    attractions: Attraction[] = [];
+    museums: Museum[] = [];
 
     markers: marker[] = [];
     lat: number = 41.902;
@@ -31,22 +31,21 @@ export class HomeComponent implements OnInit {
     load(): void {
         this.service.getCityAttractions().subscribe(data => {
             this.attractions = data;
-
-            let latTmp = 0;
-            let lngTemp = 0;
-
-            for(let attraction of this.attractions) {
-                let lat: number = attraction.latitude;
-                let lng: number = attraction.longitude;
-                latTmp += lat;
-                lngTemp += lng;
-                let label: string = attraction.name;
-                let marker: marker = {
-                    lat,lng,label
-                }
-                this.markers.push(marker);
-            }
             if(this.attractions.length > 0) {
+                let latTmp = 0;
+                let lngTemp = 0;
+
+                for(let attraction of this.attractions) {
+                    let lat: number = +attraction.latitude;
+                    let lng: number = +attraction.longitude;
+                    latTmp += lat;
+                    lngTemp += lng;
+                    let label: string = attraction.name;
+                    let marker: marker = {
+                        lat,lng,label
+                    }
+                    this.markers.push(marker);
+                }
                 this.lat = latTmp / this.attractions.length;
                 this.lng = lngTemp / this.attractions.length;
                 this.zoom = 14;

@@ -8,12 +8,13 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 import {HTTP_INTERCEPTORS}      from '@angular/common/http';
 import {TokenInterceptor}   from './interceptors/token.interceptor';
 import { AgmCoreModule }        from '@agm/core';
+import { AlertModule } from 'ngx-bootstrap/alert';
 
 import { AppComponent }         from './app.component';
 import {AuthenticationService}  from './services/authentication.service';
 import {UserService}           from './services/user.service';
 import {AuthGuard}              from './guards/auth.guard';
-
+import {NotificationService}    from './services/notification.service';
 import {LoginModule}            from './login/login.module';
 import {AdminModule}            from './admin/admin.module';
 import {AttractionModule}       from './admin/attractions/attraction.module';
@@ -30,6 +31,7 @@ import {environment}            from '../environments/environment';
     AngularFireAuthModule,
     FormsModule,
     HttpClientModule,
+    AlertModule.forRoot(),
     AgmCoreModule.forRoot({apiKey: 'AIzaSyAqY3G_iymwda5bn9g87a4YwDPWu13gnw0'}),
     LoginModule,
     AdminModule,
@@ -40,6 +42,7 @@ import {environment}            from '../environments/environment';
   providers: [AuthenticationService,
             AuthGuard,
             UserService,
+            NotificationService,
             [{
                 provide: HTTP_INTERCEPTORS,
                 useClass: TokenInterceptor,

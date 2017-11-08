@@ -5,6 +5,8 @@ import {Museum} from '../model/museum';
 import {Attraction} from '../model/attraction';
 import {environment} from '../../environments/environment';
 
+import 'rxjs/add/operator/do';
+
 @Injectable()
 export class AttractionService {
 
@@ -16,16 +18,22 @@ export class AttractionService {
   }
 
   getCityAttractions(): Observable<Attraction[]> {
-    return this.http.get<Attraction[]>(this.url + "attractionc");
+    return this.http.get<Attraction[]>(this.url + "attractionc")
+    .do(res => {
+        console.log(res);
+        this.attractions = res;
+    });
+  }
+
+  addCityAttraction(attraction: Attraction):Observable<Attraction> {
+    return this.http.post<Attraction>(this.url + "attractionc", attraction)
+    .do(res => {
+        this.attractions.push(res);
+    });
   }
 
   getCityAttraction(id: Number): Observable<Attraction> {
     return this.http.get<Attraction>(this.url + "attractionc/" + id);
-  }
-
-  addCityAttraction(attraction: Attraction):Observable<Attraction> {
-    this.attractions.push(attraction);
-    return this.http.post<Attraction>(this.url + "attractionc", attraction);
   }
 
   editCityAttraction(attraction: Attraction): Observable<any> {
@@ -33,19 +41,24 @@ export class AttractionService {
   }
 
   deleteCityAttraction(id: Number) {
-    return this.http.delete(this.url + "attractionc/" + id);
+    return this.http.delete(this.url + "attractionc/" + id)
+    .do(res => {
+        console.log(res);
+        let index = this.attractions.findIndex(i => i.id == id);
+        this.attractions = this.attractions.splice(index,1);
+    });
   }
 
   getMuseums(): Observable<Museum[]> {
     return this.http.get<Museum[]>(this.url + "museums");
   }
 
-  getMuseum(id: number): Observable<Museum> {
-    return this.http.get<Museum>(this.url + "museums/" + id);
-  }
-
   addMuseum(museum: Museum) {
     this.http.post(this.url + "museums", museum).subscribe((res) => {console.log(res);} );
+  }
+
+  getMuseum(id: number): Observable<Museum> {
+    return this.http.get<Museum>(this.url + "museums/" + id);
   }
 
   editMuseum(museum:Museum) {

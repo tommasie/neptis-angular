@@ -3,6 +3,7 @@ import { NgModule }               from '@angular/core';
 import { CommonModule }           from '@angular/common';
 import { FormsModule }            from '@angular/forms';
 import {HttpClientModule}         from '@angular/common/http';
+import { AlertModule }            from 'ngx-bootstrap/alert';
 //Components
 import {LoginComponent}           from './login.component';
 import {RegisterComponent}        from './register.component';
@@ -21,6 +22,7 @@ import {RegisterService}  from '../services/register.service';
     CommonModule,
     FormsModule,
     HttpClientModule,
+    AlertModule.forRoot(),
     LoginRoutingModule,
   ],
   providers: [AuthenticationService, RegisterService]

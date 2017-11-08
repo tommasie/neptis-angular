@@ -12,9 +12,15 @@
       </div>
     </div>
 </nav>
+<div *ngFor="let alert of notification.notifications">
+  <alert [type]="alert.type" dismissible="true">
+      <span [innerHtml]="alert.message"></span>
+  </alert>
+</div>
 <div class="container">
     <router-outlet></router-outlet>
 </div>
-<footer class="container-fluid navbar-fixed-bottom" >
+
+<footer class="container-fluid navbar-fixed-bottom" style="margin-top:30px;">
 		<p>© Diritti riservati</p>
 </footer>

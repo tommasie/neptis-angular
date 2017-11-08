@@ -6,7 +6,7 @@
     <label for="search" style="float:left">Cerca attrazione</label>
     <input type="text" name="search" class="form-control" [(ngModel)]="searchString"/>
   </div>
-  <div style="margin:20px;height=10px;overflow:auto;">
+  <div *ngIf="attractions.length > 0" style="margin:20px;height=10px;overflow:auto;">
     <table class="table table-hover">
       <thead>
         <tr>
@@ -16,12 +16,6 @@
       <tbody>
         <tr *ngFor="let attraction of attractions | myfilter: searchString" (click)="select(attraction)" [ngClass]="{'info': attraction == selectedAttraction, 'default': attraction != selectedAttraction}">
           <td>{{ attraction['name'] }}<td>
-          <!-- <td>
-            <button class="btn btn-xs btn-default">
-              <span class="glyphicon glyphicon-map-marker"></span>
-              Map
-            </button>
-          </td> -->
           <td align="right">
             <button class="btn btn-xs btn-warning" [routerLink]="[attraction['id']]">
               <span class="glyphicon glyphicon-edit"></span>
@@ -36,12 +30,13 @@
       </tbody>
     </table>
   </div>
+  <div *ngIf="attractions.length == 0" class="panel-body">
+      <p align="center">Nessuna attrazione disponibile</p>
+      <div *ngIf="loading" class="loader">
+      </div>
+  </div>
 </div>
 
 <div align="center">
   <button class="btn btn-primary" [routerLink]="['new']">Aggiungi nuova attrazione</button>
-  <!-- <div [hidden]="!selected">
-    <button class="btn btn-warning">Modifica</button>
-    <button class="btn btn-danger">Elimina</button>
-  </div> -->
 </div>
