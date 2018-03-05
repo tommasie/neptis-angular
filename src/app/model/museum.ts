@@ -3,17 +3,16 @@ export class MuseumAttraction {
 }
 
 export class Room {
+    id?: number;
     name:string;
     attraction_ms: MuseumAttraction[] = [];
     adjacent: Room[] = [];
+    starting: boolean;
 }
 
 export class Museum {
     id?: number;
     name: string;
-    latitude: number;
-    longitude: number;
-    radius: number;
     rooms: Room[] = [];
     start: Room;
     end: Room;

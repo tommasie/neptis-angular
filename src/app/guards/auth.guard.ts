@@ -12,6 +12,8 @@ export class AuthGuard implements CanActivate {
 
         canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
             return new Promise<boolean>((resolve, reject) => {
+                //TODO
+                //resolve(true);
                 // let user = this.firebase.auth.currentUser;
                 this.firebase.authState.subscribe(user => {
                     if(user != null) {

@@ -1,8 +1,15 @@
-export class Attraction {
+export class BasicAttraction {
   id?: number;
   name: string;
-  latitude: number;
-  longitude: number;
-  radius: number;
+  category: string;
   description?: string;
+  picture?: any
 }
+
+export class Attraction extends BasicAttraction {
+    latitude: number;
+    longitude: number;
+    radius: number;
+}
+
+export class MuseumAttraction extends BasicAttraction {}

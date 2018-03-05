@@ -24,6 +24,10 @@
         name="description" class="form-control">
         </textarea>
     </div>
+    <div class="form-group" style="margin-top:20px">
+        <label for="picture" style="float:left">Immagine</label>
+        <input type="file" name="picture" accept="image/jpeg, image/png" (change)="onFileChange($event)" class="form-control">
+    </div>
     <div align="center" style="margin-top:20px;">
         <button class="btn btn-success" (click)="finish()">Aggiungi</button>
         <button class="btn btn-danger" [routerLink]="['/home','attractions']">Annulla</button>

@@ -12,6 +12,7 @@ import {AdminComponent}           from './admin.component';
 import {HomeComponent}            from './home/home.component'
 
 import {AttractionService}        from '../services/attraction.service';
+import {MuseumService}            from '../services/museum.service';
 @NgModule({
   declarations:[
     AdminComponent,
@@ -25,7 +26,7 @@ import {AttractionService}        from '../services/attraction.service';
     AdminRoutingModule,
     AgmCoreModule.forRoot({apiKey: 'AIzaSyAqY3G_iymwda5bn9g87a4YwDPWu13gnw0'}),
   ],
-  providers: [AttractionService]
+  providers: [AttractionService, MuseumService]
 })
 
 export class AdminModule {}

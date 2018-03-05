@@ -32,6 +32,13 @@ export class AttractionService {
     });
   }
 
+  addCityAttractionB(attraction: FormData):Observable<Attraction> {
+    return this.http.post<Attraction>(this.url + "attractionc", attraction)
+    .do(res => {
+        this.attractions.push(res);
+    });
+  }
+
   getCityAttraction(id: Number): Observable<Attraction> {
     return this.http.get<Attraction>(this.url + "attractionc/" + id);
   }

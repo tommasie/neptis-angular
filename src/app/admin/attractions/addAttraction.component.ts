@@ -15,8 +15,9 @@ export class AddAttractionComponent implements OnInit {
     attraction: Attraction = new Attraction();
     lat: number = 41.90;
     lng: number = 12.4963;
-    private img;
     circ : Circle = new Circle();
+    picture : File;
+    formData = new FormData();
 
     constructor(private service: AttractionService,
         private router: Router,
@@ -40,24 +41,25 @@ export class AddAttractionComponent implements OnInit {
             this.circ.radius = value;
         }
 
-        //   fileChange(event) {
-        //       let fileList: FileList = event.target.files;
-        //       let file: File = fileList[0];
-        //       let formData:FormData = new FormData();
-        //       formData.append('uploadFile', file, file.name);
-        //       let headers = new HttpHeaders();
-        //       headers.set('Content-Type', 'multipart/form-data');
-        //       this.http.post("http://localhost:8080/single",formData, {headers: headers})
-        //         .subscribe(data => {
-        //             console.log(data);
-        //         })
-        // }
+        onFileChange(event) {
+            if(event.target.files.length > 0) {
+                this.picture = event.target.files[0];
+                console.log(this.picture);
+                //this.form.get('avatar').setValue(file);
+            }
+        }
 
         finish() {
+            this.formData.set("name", this.attraction.name);
+            this.formData.set("latitude", this.circ.lat.toString());
+            this.formData.set("longitude", this.circ.lng.toString());
+            this.formData.set("radius", this.circ.radius.toString());
+            this.formData.set("description", this.attraction.description);
+            this.formData.set("picture", this.picture);
             this.attraction.latitude = this.circ.lat;
             this.attraction.longitude = this.circ.lng;
             this.attraction.radius = this.circ.radius;
-            this.service.addCityAttraction(this.attraction).subscribe(attraction => {
+            this.service.addCityAttractionB(this.formData).subscribe(attraction => {
                 this.router.navigate(['/home','attractions']);
             });
         }
