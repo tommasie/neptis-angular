@@ -4,23 +4,29 @@
             <img class="navbar-brand" src="assets/neptis_icon.png" style="width: 50px; height: 50px; padding:5px; ">
             <a class="navbar-brand" style="color: white; cursor: default; pointer-events: none;">Neptis Planner</a>
         </div>
-    <div class="collapse navbar-collapse">
-        <ul class="nav navbar-nav navbar-right" [hidden]="!logged">
-            <li><a href="" style="color: white; cursor: default; pointer-events: none;"><span class="glyphicon glyphicon-user"></span>Utente connesso: {{ username }}</a></li>
-            <li><a (click)="logout()"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
-        </ul>
-      </div>
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav navbar-right" [hidden]="!logged">
+                <li>
+                    <a href="" style="color: white; cursor: default; pointer-events: none;">
+                        <span class="glyphicon glyphicon-user"></span>Utente connesso: {{ username }}</a>
+                </li>
+                <li>
+                    <a (click)="logout()">
+                        <span class="glyphicon glyphicon-log-out"></span> Logout</a>
+                </li>
+            </ul>
+        </div>
     </div>
 </nav>
 <div *ngFor="let alert of notification.notifications">
-  <alert [type]="alert.type" dismissible="true">
-      <span [innerHtml]="alert.message"></span>
-  </alert>
+    <alert [type]="alert.type" dismissible="true">
+        <span [innerHtml]="alert.message"></span>
+    </alert>
 </div>
 <div class="container">
     <router-outlet></router-outlet>
 </div>
 
 <footer class="container-fluid navbar-fixed-bottom" style="margin-top:30px;">
-		<p>© Diritti riservati</p>
+    <p>© Diritti riservati</p>
 </footer>

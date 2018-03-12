@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import {Observable} from 'rxjs';
-import {environment} from '../../environments/environment';
+import { Observable } from 'rxjs/Observable';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class RegisterService {
 
     private url = environment.unprotectedUrl;
-    constructor(private http: HttpClient)  {
+    constructor(private http: HttpClient) {
     }
 
     getCitiesJSON(): Observable<Object> {

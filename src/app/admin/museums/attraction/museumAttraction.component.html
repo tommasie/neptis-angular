@@ -1,30 +1,28 @@
-    <div class="panel panel-primary">
-        <div class="panel-heading">
-            <h4 class="panel-title">Nuova attrazione in {{selectedArea.name}}</h4>
-        </div>
-        <div class="panel-body">
-            <form [formGroup]="attractionForm" (ngSubmit)="createNewAttraction()">
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h4 class="panel-title">Nuova attrazione in {{selectedArea.name}}</h4>
+    </div>
+    <div class="panel-body">
+        <form [formGroup]="attractionForm" (ngSubmit)="createNewAttraction()">
             <div class="form-group">
                 <label for="name">Nome</label>
                 <input formControlName="name" name="name" type="text" class="form-control">
-                <div *ngIf="name.invalid && (name.dirty || name.touched)"
-                     class="alert alert-danger">
-                  <div *ngIf="name.errors.required">
-                    Inserire il nome
-                  </div>
-                  <div *ngIf="name.errors.minlength">
-                    Il nome deve avere almeno 4 caratteri
-                  </div>
+                <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
+                    <div *ngIf="name.errors.required">
+                        Inserire il nome
+                    </div>
+                    <div *ngIf="name.errors.minlength">
+                        Il nome deve avere almeno 4 caratteri
+                    </div>
                 </div>
             </div>
             <div class="form-group">
                 <label for="category">Categoria</label>
-                <input formControlName="category"  name="category" type="text" class="form-control">
-                <div *ngIf="cat.invalid && (cat.dirty || cat.touched)"
-                     class="alert alert-danger">
-                  <div *ngIf="cat.errors.required">
-                    Categoria obbligatoria
-                  </div>
+                <input formControlName="category" name="category" type="text" class="form-control">
+                <div *ngIf="cat.invalid && (cat.dirty || cat.touched)" class="alert alert-danger">
+                    <div *ngIf="cat.errors.required">
+                        Categoria obbligatoria
+                    </div>
                 </div>
             </div>
             <div class="form-group">
@@ -36,12 +34,13 @@
                 <input type="file" class="form-control-file" name="picture">
             </div>
             <div class="checkbox">
-            <label><input type="checkbox"> Remember me</label>
+                <label>
+                    <input type="checkbox"> Remember me</label>
             </div>
             <div align="center">
                 <button type="submit" class="btn btn-success" [disabled]="attractionForm.invalid">Aggiungi</button>
                 <button type="button" class="btn btn-danger" (click)="cancel()">Annulla</button>
             </div>
-            </form>
-        </div>
+        </form>
     </div>
+</div>

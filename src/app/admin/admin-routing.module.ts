@@ -1,19 +1,20 @@
-import { NgModule }             from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthGuard }            from '../guards/auth.guard';
+import { AuthGuard } from '../guards/auth.guard';
 
-import {AdminComponent}         from './admin.component';
-import {HomeComponent}          from './home/home.component';
+import { AdminComponent } from './admin.component';
+import { HomeComponent } from './home/home.component';
 
-import {attractionRoutes}       from './attractions/attraction-routes';
-import {museumRoutes}           from './museums/museum-routes';
+import { attractionRoutes } from './attractions/attraction-routes';
+import { museumRoutes } from './museums/museum-routes';
 
 const routes: Routes = [
-  {path: 'home', component: AdminComponent, canActivate:[AuthGuard],
+  {
+    path: 'home', component: AdminComponent, canActivate: [AuthGuard],
     children: [
-      {path: '', component: HomeComponent},
-      {path: 'attractions', children: [...attractionRoutes]},
-      {path: 'museums', children: [...museumRoutes]},
+      { path: '', component: HomeComponent },
+      { path: 'attractions', children: [...attractionRoutes] },
+      { path: 'museums', children: [...museumRoutes] },
     ]
   }
 ];

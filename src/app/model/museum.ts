@@ -1,10 +1,10 @@
 export class MuseumAttraction {
-    name:string;
+    name: string;
 }
 
 export class Room {
     id?: number;
-    name:string;
+    name: string;
     attraction_ms: MuseumAttraction[] = [];
     adjacent: Room[] = [];
     starting: boolean;

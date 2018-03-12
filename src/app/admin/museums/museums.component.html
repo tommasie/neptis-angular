@@ -4,10 +4,10 @@
   </div>
   <div class="form-group" style="margin:20px">
     <label for="search" style="float:left">Cerca museo</label>
-    <input type="text" name="search" class="form-control" [(ngModel)]="searchString"/>
+    <input type="text" name="search" class="form-control" [(ngModel)]="searchString" />
   </div>
-  <div style="margin:20px;height=10px;overflow: auto;">
-    <table class="table table-hover">
+  <div style="margin:20px;overflow:auto;">
+    <table class="table table-hover" *ngIf="museums.length != 0; else museumElse">
       <thead>
         <tr>
           <th>Nome</th>
@@ -15,21 +15,25 @@
       </thead>
       <tbody>
         <tr *ngFor="let museum of museums" (click)="select(museum)" [ngClass]="{'info': museum == selectedAttraction, 'default': museum != selectedAttraction}">
-          <td>{{ museum['name'] }}<td>
-          <td align="right">
-            <button class="btn btn-xs btn-warning" [routerLink]="[museum['id']]">
-              <span class="glyphicon glyphicon-edit"></span>
-              Modifica
-            </button>
-            <button class="btn btn-xs btn-danger">
-              <span class="glyphicon glyphicon-trash"></span>
-              Elimina
-            </button>
-          </td>
+          <td>{{ museum['name'] }}
+            <td>
+              <td align="right">
+                <button class="btn btn-xs btn-warning" [routerLink]="[museum['id']]">
+                  <span class="glyphicon glyphicon-edit"></span>
+                  Modifica
+                </button>
+                <button class="btn btn-xs btn-danger">
+                  <span class="glyphicon glyphicon-trash"></span>
+                  Elimina
+                </button>
+              </td>
         </tr>
       </tbody>
     </table>
-</div>
+    <ng-template #museumElse>
+      <p align="center">Nessuna museo inserito</p>
+    </ng-template>
+  </div>
 </div>
 
 <div align="center">

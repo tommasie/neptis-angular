@@ -5,14 +5,14 @@
 
 export const environment = {
     production: false,
-    unprotectedUrl: "http://localhost:9070/",
-    apiUrl: "http://localhost:9070/api/admin/",
+    unprotectedUrl: 'http://localhost:9070/',
+    apiUrl: 'http://localhost:9070/api/admin/',
     firebase: {
-        apiKey: "AIzaSyB_Ia57LlkZTjjzfEAse0XQaN35XOvxQak",
-        authDomain: "android-app-152db.firebaseapp.com",
-        databaseURL: "https://android-app-152db.firebaseio.com",
-        projectId: "android-app-152db",
-        storageBucket: "android-app-152db.appspot.com",
-        messagingSenderId: "274641228836"
+        apiKey: 'AIzaSyB_Ia57LlkZTjjzfEAse0XQaN35XOvxQak',
+        authDomain: 'android-app-152db.firebaseapp.com',
+        databaseURL: 'https://android-app-152db.firebaseio.com',
+        projectId: 'android-app-152db',
+        storageBucket: 'android-app-152db.appspot.com',
+        messagingSenderId: '274641228836'
     }
 };

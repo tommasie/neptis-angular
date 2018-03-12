@@ -3,7 +3,7 @@
         <h3 class="panel-title">Mappa delle attrazioni</h3>
     </div>
     <div class="panel-body">
-        <agm-map  [latitude]="lat" [longitude]="lng" [zoom]="zoom" [usePanning]='true'>
+        <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" [usePanning]='true'>
             <agm-marker *ngFor="let m of markers" [latitude]="m.lat" [longitude]="m.lng"></agm-marker>
         </agm-map>
     </div>
@@ -24,47 +24,49 @@
             </thead>
             <tbody>
                 <tr *ngFor="let attraction of attractions">
-                    <td>{{ attraction['name'] }}<td>
-                        <td align="right">
-                            <button class="btn btn-xs btn-default" (click)="setLatLng(attraction)">
-                                <span class="glyphicon glyphicon-map-marker"></span>
-                                Guarda su mappa
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div *ngIf="attractions.length == 0" class="panel-body">
-            <p align="center">Nessuna attrazione disponibile</p>
-        </div>
+                    <td>{{ attraction['name'] }}
+                        <td>
+                            <td align="right">
+                                <button class="btn btn-xs btn-default" (click)="setLatLng(attraction)">
+                                    <span class="glyphicon glyphicon-map-marker"></span>
+                                    Guarda su mappa
+                                </button>
+                            </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
+    <div *ngIf="attractions.length == 0" class="panel-body">
+        <p align="center">Nessuna attrazione disponibile</p>
+    </div>
+</div>
 
-    <div class="panel panel-primary">
-        <div class="panel-heading">
-            <h3 class="panel-title">Musei</h3>
-        </div>
-        <div *ngIf="museums.length > 0" class="panel-body">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Nome</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let museum of museums">
-                        <td>{{ museum['name'] }}<td>
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">Musei</h3>
+    </div>
+    <div *ngIf="museums.length > 0" class="panel-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let museum of museums">
+                    <td>{{ museum['name'] }}
+                        <td>
                             <td align="right">
                                 <button class="btn btn-xs btn-default">
                                     <span class="glyphicon glyphicon-map-marker"></span>
                                     Guarda su mappa
                                 </button>
                             </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div *ngIf="museums.length == 0" class="panel-body">
-                <p align="center">Nessun museo disponibile</p>
-            </div>
-        </div>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div *ngIf="museums.length == 0" class="panel-body">
+        <p align="center">Nessun museo disponibile</p>
+    </div>
+</div>

@@ -1,31 +1,31 @@
-import {Component, OnInit} from '@angular/core';
-import {animate, state, style, transition, trigger} from '@angular/animations';
-import {FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import 'rxjs/add/operator/switchMap';
 import { AttractionService } from '../../services/attraction.service';
-import {MuseumService} from '../../services/museum.service';
-import {Museum, Room} from '../../model/museum';
-import {MuseumAttraction} from '../../model/attraction';
+import { MuseumService } from '../../services/museum.service';
+import { Museum, Room } from '../../model/museum';
+import { MuseumAttraction } from '../../model/attraction';
 
 @Component({
-  selector: 'admin-edit-museum',
-  animations: [
-      trigger('visibility', [
-          state('shown', style({height:'*'})),
-          state('hidden',style({height:0})),
-          transition("* => *", animate('1s'))
-      ])
-  ],
-  templateUrl: './editMuseum.component.html',
-  //styleUrls: ['./attraction.component.css']
+    selector: 'app-admin-edit-museum',
+    animations: [
+        trigger('visibility', [
+            state('shown', style({ height: '*' })),
+            state('hidden', style({ height: 0 })),
+            transition('* => *', animate('1s'))
+        ])
+    ],
+    templateUrl: './editMuseum.component.html',
+    // styleUrls: ['./attraction.component.css']
 })
 
 export class EditMuseumComponent implements OnInit {
 
     museum: Museum = new Museum();
     museumCopy: Museum = new Museum();
-    //variables for temporary edits
+    // variables for temporary edits
     museumName: string;
     roomName: string;
     areaName: string;
@@ -38,47 +38,47 @@ export class EditMuseumComponent implements OnInit {
     attraction: MuseumAttraction;
     attractionFile: File = null;
 
-    //UI variables
-    museumNameDisabled: boolean = true;
-    newRoomButton : boolean = true;
-    newRoomForm : boolean = false;
-    startingRoom: boolean = false;
-    newAttractionForm: boolean = false;
-    newAdjacencyForm: boolean = false;
-    fileLoaded: boolean = false;
+    // UI variables
+    museumNameDisabled = true;
+    newRoomButton = true;
+    newRoomForm = false;
+    startingRoom = false;
+    newAttractionForm = false;
+    newAdjacencyForm = false;
+    fileLoaded = false;
 
     selectedAdjacency: object;
 
-    //FormGroups
+    // FormGroups
     attractionForm: FormGroup;
 
     constructor(private route: ActivatedRoute,
-                private router: Router,
+        private router: Router,
         private fb: FormBuilder,
         private service: AttractionService,
-                private museumService: MuseumService) {}
+        private museumService: MuseumService) { }
 
 
     ngOnInit(): void {
         this.route.paramMap
-        .switchMap((params: ParamMap) =>
-          this.service.getMuseum(+params.get('id')))
-          .subscribe(museum => {
-              console.log(museum);
-              this.museum = museum;
-              this.museumCopy = Object.assign({}, this.museum);
-              this.museumCopy.rooms.forEach(room => {
-                  this.rms.push({id:room.id, text:room.name});
-              })
-          });
-          this.attractionForm = this.fb.group({
-              name: ['', [Validators.required]],
-              category: ['', Validators.required],
-              description: ''
-          });
+            .switchMap((params: ParamMap) =>
+                this.service.getMuseum(+params.get('id')))
+            .subscribe(museum => {
+                console.log(museum);
+                this.museum = museum;
+                this.museumCopy = Object.assign({}, this.museum);
+                this.museumCopy.rooms.forEach(room => {
+                    this.rms.push({ id: room.id, text: room.name });
+                });
+            });
+        this.attractionForm = this.fb.group({
+            name: ['', [Validators.required]],
+            category: ['', Validators.required],
+            description: ''
+        });
     }
 
-    enableMuseumEdit() : void {
+    enableMuseumEdit(): void {
         this.museumNameDisabled = !this.museumNameDisabled;
     }
 
@@ -95,7 +95,7 @@ export class EditMuseumComponent implements OnInit {
     }
 
     addRoom() {
-        let room: Room = new Room();
+        const room: Room = new Room();
         room.name = this.roomName;
         room.starting = this.startingRoom;
         this.museumService.createRoom(room, this.museum.id)
@@ -104,7 +104,7 @@ export class EditMuseumComponent implements OnInit {
                 room.id = res.id;
                 this.museum.rooms.push(room);
             });
-        this.roomName = "";
+        this.roomName = '';
         this.newRoomForm = false;
     }
 
@@ -123,15 +123,15 @@ export class EditMuseumComponent implements OnInit {
     addAdjacency(room) {
         room.adjacent.push(this.selectedAdjacency);
         this.museumService.addAdjacency(room, this.selectedAdjacency, this.museum.id)
-        .subscribe(res => {
-            console.log(res);
-            this.newAdjacencyForm = false;
-        })
+            .subscribe(res => {
+                console.log(res);
+                this.newAdjacencyForm = false;
+            });
         this.selectedAdjacency = null;
     }
 
     deleteRoom(area) {
-        if(confirm("Sei sicuro di voler eliminare la sala " + area.name + '?')) {
+        if (confirm('Sei sicuro di voler eliminare la sala ' + area.name + '?')) {
 
         }
     }
@@ -150,12 +150,12 @@ export class EditMuseumComponent implements OnInit {
     }
 
     createNewAttraction() {
-        let model = this.attractionForm.value;
-        let attraction: MuseumAttraction = {
+        const model = this.attractionForm.value;
+        const attraction: MuseumAttraction = {
             name: model.name as string,
             category: model.category as string,
             description: model.description as string
-        }
+        };
         this.museumService.createAttraction(attraction, this.attractionFile, this.selectedArea.id)
             .subscribe(res => {
                 console.log(res);
@@ -172,7 +172,6 @@ export class EditMuseumComponent implements OnInit {
     }
 
     showEditAttractionForm(attraction) {
-        console
         this.newAttractionForm = true;
         this.selectedAttraction = attraction;
         this.attractionForm = this.fb.group({
@@ -188,12 +187,12 @@ export class EditMuseumComponent implements OnInit {
     }
 
     editAttraction() {
-        let model = this.attractionForm.value;
-        let attraction: MuseumAttraction = {
+        const model = this.attractionForm.value;
+        const attraction: MuseumAttraction = {
             name: model.name as string,
             category: model.category as string,
             description: model.description as string
-        }
+        };
         this.museumService.editAttraction(attraction, this.attractionFile)
             .subscribe(res => {
                 console.log(res);
@@ -211,57 +210,57 @@ export class EditMuseumComponent implements OnInit {
 
     deleteAttraction(attraction) {
         console.log(attraction);
-        if(confirm("Si è certi di voler rimuovere l'attrazione " + attraction.name + '?')) {
+        if (confirm('Si è certi di voler rimuovere l\'attrazione ' + attraction.name + '?')) {
             this.museumService.deleteAttraction(attraction.id).subscribe(res => {
                 this.museum.rooms.forEach((room, i) => {
-                    room.attraction_ms.forEach((attr:MuseumAttraction,j) => {
-                        if(attr.id == attraction.id) {
-                            room.attraction_ms.slice(j,1);
+                    room.attraction_ms.forEach((attr: MuseumAttraction, j) => {
+                        if (attr.id === attraction.id) {
+                            room.attraction_ms.slice(j, 1);
                         }
 
                     });
                 });
-            })
+            });
         }
     }
 
     getFile(event) {
-        //this.attraction.picture = event.target.files[0];
-        var file    = event.target.files[0];
+        // this.attraction.picture = event.target.files[0];
+        const file = event.target.files[0];
         this.attractionFile = event.target.files[0];
         this.fileLoaded = true;
-          var reader  = new FileReader();
+        const reader = new FileReader();
 
-          reader.onload = this._handleReaderLoaded.bind(this);
-       reader.readAsBinaryString(file);
-   }
+        reader.onload = this._handleReaderLoaded.bind(this);
+        reader.readAsBinaryString(file);
+    }
 
-   _handleReaderLoaded(readerEvt) {
-       var binaryString = readerEvt.target.result;
-       //this.attraction.picture = btoa(binaryString);  // Converting binary string data.
-  }
+    _handleReaderLoaded(readerEvt) {
+        const binaryString = readerEvt.target.result;
+        // this.attraction.picture = btoa(binaryString);  // Converting binary string data.
+    }
 
-    selectArea(area:Room) {
+    selectArea(area: Room) {
         this.selectedArea = area;
     }
 
     addAttraction() {
-        let attr: MuseumAttraction = new MuseumAttraction();
+        const attr: MuseumAttraction = new MuseumAttraction();
         attr.name = this.attractionName;
         this.selectedArea.attraction_ms.push(attr);
-        this.attractionName = "";
+        this.attractionName = '';
     }
 
     getRooms(): string[] {
-        let array:string[] = []
-        for(let room of this.museum.rooms) {
+        const array: string[] = [];
+        for (const room of this.museum.rooms) {
             array.push(room.name);
         }
         return array;
     }
 
 
-    get name() {return this.attractionForm.get('name');}
-    get cat() {return this.attractionForm.get("category");}
-    get desc() {return this.attractionForm.get('description');}
+    get name() { return this.attractionForm.get('name'); }
+    get cat() { return this.attractionForm.get('category'); }
+    get desc() { return this.attractionForm.get('description'); }
 }

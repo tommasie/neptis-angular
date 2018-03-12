@@ -3,7 +3,7 @@ export class BasicAttraction {
   name: string;
   category: string;
   description?: string;
-  picture?: any
+  picture?: any;
 }
 
 export class Attraction extends BasicAttraction {

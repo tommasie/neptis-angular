@@ -1,21 +1,21 @@
-import {Component, OnInit} from '@angular/core';
-import {animate, state, style, transition, trigger} from '@angular/animations';
-import {FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { AttractionService } from '../../services/attraction.service';
-import {MuseumService} from '../../services/museum.service';
-import {Museum, Room} from '../../model/museum';
-import {MuseumAttraction} from '../../model/attraction';
+import { MuseumService } from '../../services/museum.service';
+import { Museum, Room } from '../../model/museum';
+import { MuseumAttraction } from '../../model/attraction';
 @Component({
-    selector: 'admin-add-museum',
+    selector: 'app-admin-add-museum',
     animations: [
         trigger('visibility', [
-            state('shown', style({opacity:1})),
-            state('hidden',style({opacity:0})),
-            transition("* => *", animate('1s'))
+            state('shown', style({ opacity: 1 })),
+            state('hidden', style({ opacity: 0 })),
+            transition('* => *', animate('1s'))
         ])
     ],
     templateUrl: './addMuseum.component.html',
-    //styleUrls: ['./attraction.component.css']
+    // styleUrls: ['./attraction.component.css']
 })
 
 export class AddMuseumComponent implements OnInit {
@@ -32,23 +32,23 @@ export class AddMuseumComponent implements OnInit {
     attraction: MuseumAttraction;
     attractionFile: File = null;
 
-    //UI variables
-    museumNameDisabled: boolean = false;
-    newRoomButton : string = 'hidden';
-    newRoomForm : boolean = false;
-    startingRoom: boolean =false;
-    newAttractionForm: boolean = false;
-    newAdjacencyForm: boolean = false;
-    fileLoaded: boolean = false;
+    // UI variables
+    museumNameDisabled = false;
+    newRoomButton = 'hidden';
+    newRoomForm = false;
+    startingRoom = false;
+    newAttractionForm = false;
+    newAdjacencyForm = false;
+    fileLoaded = false;
 
     selectedAdjacency: object;
 
-    //FormGroups
+    // FormGroups
     attractionForm: FormGroup;
 
     constructor(private fb: FormBuilder,
         private service: AttractionService,
-                private museumService: MuseumService) {}
+        private museumService: MuseumService) { }
 
     ngOnInit(): void {
 
@@ -62,8 +62,8 @@ export class AddMuseumComponent implements OnInit {
             .subscribe(res => {
                 this.museum.id = res.id;
                 this.museum.rooms.forEach(room => {
-                    this.rms.push({id:room.id, text:room.name});
-                })
+                    this.rms.push({ id: room.id, text: room.name });
+                });
             });
     }
 
@@ -72,7 +72,7 @@ export class AddMuseumComponent implements OnInit {
     }
 
     addRoom() {
-        let room: Room = new Room();
+        const room: Room = new Room();
         room.name = this.roomName;
         room.starting = this.startingRoom;
         this.museumService.createRoom(room, this.museum.id)
@@ -81,7 +81,7 @@ export class AddMuseumComponent implements OnInit {
                 room.id = res.id;
                 this.museum.rooms.push(room);
             });
-        this.roomName = "";
+        this.roomName = '';
         this.newRoomForm = false;
     }
 
@@ -100,10 +100,10 @@ export class AddMuseumComponent implements OnInit {
     addAdjacency(room) {
         room.adjacent.push(this.selectedAdjacency);
         this.museumService.addAdjacency(room, this.selectedAdjacency, this.museum.id)
-        .subscribe(res => {
-            console.log(res);
-            this.newAdjacencyForm = false;
-        })
+            .subscribe(res => {
+                console.log(res);
+                this.newAdjacencyForm = false;
+            });
         this.selectedAdjacency = null;
     }
 
@@ -120,12 +120,12 @@ export class AddMuseumComponent implements OnInit {
     }
 
     createNewAttraction() {
-        let model = this.attractionForm.value;
-        let attraction: MuseumAttraction = {
+        const model = this.attractionForm.value;
+        const attraction: MuseumAttraction = {
             name: model.name as string,
             category: model.category as string,
             description: model.description as string
-        }
+        };
         this.museumService.createAttraction(attraction, this.attractionFile, this.selectedArea.id)
             .subscribe(res => {
                 console.log(res);
@@ -142,41 +142,41 @@ export class AddMuseumComponent implements OnInit {
     }
 
     getFile(event) {
-        //this.attraction.picture = event.target.files[0];
-        var file    = event.target.files[0];
+        // this.attraction.picture = event.target.files[0];
+        const file = event.target.files[0];
         this.attractionFile = event.target.files[0];
         this.fileLoaded = true;
-          var reader  = new FileReader();
+        const reader = new FileReader();
 
-          reader.onload = this._handleReaderLoaded.bind(this);
-       reader.readAsBinaryString(file);
-   }
+        reader.onload = this._handleReaderLoaded.bind(this);
+        reader.readAsBinaryString(file);
+    }
 
-   _handleReaderLoaded(readerEvt) {
-       var binaryString = readerEvt.target.result;
-       //this.attraction.picture = btoa(binaryString);  // Converting binary string data.
-  }
+    _handleReaderLoaded(readerEvt) {
+        const binaryString = readerEvt.target.result;
+        // this.attraction.picture = btoa(binaryString);  // Converting binary string data.
+    }
 
-    selectArea(area:Room) {
+    selectArea(area: Room) {
         this.selectedArea = area;
     }
 
     addAttraction() {
-        let attr: MuseumAttraction = new MuseumAttraction();
+        const attr: MuseumAttraction = new MuseumAttraction();
         attr.name = this.attractionName;
         this.selectedArea.attraction_ms.push(attr);
-        this.attractionName = "";
+        this.attractionName = '';
     }
 
     getRooms(): string[] {
-        let array:string[] = []
-        for(let room of this.museum.rooms) {
+        const array: string[] = [];
+        for (const room of this.museum.rooms) {
             array.push(room.name);
         }
         return array;
     }
 
-    get name() {return this.attractionForm.get('name');}
-    get cat() {return this.attractionForm.get("category");}
-    get desc() {return this.attractionForm.get('description');}
+    get name() { return this.attractionForm.get('name'); }
+    get cat() { return this.attractionForm.get('category'); }
+    get desc() { return this.attractionForm.get('description'); }
 }

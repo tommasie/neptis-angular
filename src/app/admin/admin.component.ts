@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {AttractionService} from '../services/attraction.service';
+import { Component, OnInit } from '@angular/core';
+import { AttractionService } from '../services/attraction.service';
 @Component({
     selector: 'app-admin',
     providers: [AttractionService],
@@ -9,7 +9,7 @@ import {AttractionService} from '../services/attraction.service';
 
 export class AdminComponent implements OnInit {
 
-    constructor() {}
+    constructor() { }
 
     ngOnInit() {
 

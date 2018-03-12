@@ -4,9 +4,9 @@
   </div>
   <div class="form-group" style="margin:20px">
     <label for="search" style="float:left">Cerca attrazione</label>
-    <input type="text" name="search" class="form-control" [(ngModel)]="searchString"/>
+    <input type="text" name="search" class="form-control" [(ngModel)]="searchString" />
   </div>
-  <div *ngIf="attractions.length > 0" style="margin:20px;height=10px;overflow:auto;">
+  <div *ngIf="attractions.length > 0" style="margin:20px;overflow:auto;">
     <table class="table table-hover">
       <thead>
         <tr>
@@ -15,25 +15,26 @@
       </thead>
       <tbody>
         <tr *ngFor="let attraction of attractions | myfilter: searchString" (click)="select(attraction)" [ngClass]="{'info': attraction == selectedAttraction, 'default': attraction != selectedAttraction}">
-          <td>{{ attraction['name'] }}<td>
-          <td align="right">
-            <button class="btn btn-xs btn-warning" [routerLink]="[attraction['id']]">
-              <span class="glyphicon glyphicon-edit"></span>
-              Modifica
-            </button>
-            <button class="btn btn-xs btn-danger" (click)="delete(attraction)">
-              <span class="glyphicon glyphicon-trash"></span>
-              Elimina
-            </button>
-          </td>
+          <td>{{ attraction['name'] }}
+            <td>
+              <td align="right">
+                <button class="btn btn-xs btn-warning" [routerLink]="[attraction['id']]">
+                  <span class="glyphicon glyphicon-edit"></span>
+                  Modifica
+                </button>
+                <button class="btn btn-xs btn-danger" (click)="delete(attraction)">
+                  <span class="glyphicon glyphicon-trash"></span>
+                  Elimina
+                </button>
+              </td>
         </tr>
       </tbody>
     </table>
   </div>
   <div *ngIf="attractions.length == 0" class="panel-body">
-      <p align="center">Nessuna attrazione disponibile</p>
-      <div *ngIf="loading" class="loader">
-      </div>
+    <p align="center">Nessuna attrazione disponibile</p>
+    <div *ngIf="loading" class="loader">
+    </div>
   </div>
 </div>
 

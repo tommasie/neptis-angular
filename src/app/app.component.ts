@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import {Router} from '@angular/router';
-import {AuthenticationService} from './services/authentication.service';
-import {NotificationService} from './services/notification.service';
-import {AngularFireAuth} from 'angularfire2/auth';
+import { Router } from '@angular/router';
+import { AuthenticationService } from './services/authentication.service';
+import { NotificationService } from './services/notification.service';
+import { AngularFireAuth } from 'angularfire2/auth';
 
 @Component({
     selector: 'app-root',
@@ -19,11 +19,11 @@ export class AppComponent {
     notificationType: string;
 
     constructor(private auth: AuthenticationService,
-                private router: Router,
-                private firebase: AngularFireAuth,
-                public notification: NotificationService) {
+        private router: Router,
+        private firebase: AngularFireAuth,
+        public notification: NotificationService) {
         this.firebase.authState.subscribe(user => {
-            if(user == null) {
+            if (user == null) {
                 this.logged = false;
             } else {
                 this.username = user.email;

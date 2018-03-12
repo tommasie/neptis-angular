@@ -1,12 +1,12 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AttractionService } from '../../services/attraction.service';
 
-import {GoogleMapsAPIWrapper} from '@agm/core';
-import {Attraction} from '../../model/attraction';
-import {Museum} from '../../model/museum';
+import { GoogleMapsAPIWrapper } from '@agm/core';
+import { Attraction } from '../../model/attraction';
+import { Museum } from '../../model/museum';
 
 @Component({
-    selector: 'admin-home',
+    selector: 'app-admin-home',
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.css']
 })
@@ -16,13 +16,13 @@ export class HomeComponent implements OnInit {
     attractions: Attraction[] = [];
     museums: Museum[] = [];
 
-    markers: marker[] = [];
-    lat: number = 41.902;
-    lng: number = 12.499;
-    zoom: number = 5;
+    markers: IMarker[] = [];
+    lat = 41.902;
+    lng = 12.499;
+    zoom = 5;
     map: any;
 
-    constructor(private service: AttractionService) {}
+    constructor(private service: AttractionService) { }
 
     ngOnInit() {
         this.load();
@@ -31,19 +31,19 @@ export class HomeComponent implements OnInit {
     load(): void {
         this.service.getCityAttractions().subscribe(data => {
             this.attractions = data;
-            if(this.attractions.length > 0) {
+            if (this.attractions.length > 0) {
                 let latTmp = 0;
                 let lngTemp = 0;
 
-                for(let attraction of this.attractions) {
-                    let lat: number = +attraction.latitude;
-                    let lng: number = +attraction.longitude;
+                for (const attraction of this.attractions) {
+                    const lat: number = +attraction.latitude;
+                    const lng: number = +attraction.longitude;
                     latTmp += lat;
                     lngTemp += lng;
-                    let label: string = attraction.name;
-                    let marker: marker = {
-                        lat,lng,label
-                    }
+                    const label: string = attraction.name;
+                    const marker: IMarker = {
+                        lat, lng, label
+                    };
                     this.markers.push(marker);
                 }
                 this.lat = latTmp / this.attractions.length;
@@ -52,18 +52,18 @@ export class HomeComponent implements OnInit {
             }
 
         });
-        this.service.getMuseums().subscribe(data => {this.museums = data;});
+        this.service.getMuseums().subscribe(data => { this.museums = data; });
     }
 
     setLatLng(attraction): void {
-        let lat = +attraction['latitude'];
-        let lng = +attraction['longitude'];
+        const lat = +attraction['latitude'];
+        const lng = +attraction['longitude'];
         this.lat = lat;
         this.lng = lng;
     }
 }
 
-interface marker {
+interface IMarker {
     lat: number;
     lng: number;
     label: string;

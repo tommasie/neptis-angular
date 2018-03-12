@@ -1,26 +1,26 @@
 import { Injectable } from '@angular/core';
-import {Subject} from 'rxjs';
+import { Subject } from 'rxjs/Subject';
 
 @Injectable()
 export class NotificationService {
 
-    notifications: notification[] = [];
+    notifications: INotification[] = [];
 
-    subject: Subject<notification> = new Subject();
+    subject: Subject<INotification> = new Subject();
 
-    isOpen: boolean = false;
+    isOpen = false;
     type: string;
     message: string;
 
-    push(data: notification) {
-        if(this.notifications.length == 1) {
+    push(data: INotification) {
+        if (this.notifications.length === 1) {
             this.notifications.pop();
         }
         this.notifications.push(data);
     }
 }
 
-interface notification {
+interface INotification {
     type: string;
     message: string;
     isOpen: boolean;
