@@ -8,8 +8,8 @@
         <div class="input-group">
             <input [(ngModel)]="attraction.name" name="name" type="text" class="form-control" [readonly]="readonly" required>
             <span class="input-group-btn">
-                <button class="btn btn-secondary" type="button" (click)="enableEdit()">
-                    <span class="glyphicon glyphicon-edit"></span>
+                <button class="btn btn-success" type="button" (click)="enableEdit()">
+                    <span class="glyphicon glyphicon-edit"></span>Modifica
                 </button>
             </span>
         </div>
@@ -18,6 +18,10 @@
         <label for="description" style="float:left">Descrizione</label>
         <textarea [(ngModel)]="attraction.description" name="description" class="form-control">
         </textarea>
+    </div>
+    <div class="form-group">
+        <label for="picture">Immagine</label>
+        <input type="file" class="form-control-file" name="picture" (change)="getFile($event)">
     </div>
 
     <agm-map [latitude]="attraction.latitude" [longitude]="attraction.longitude" [zoom]="18" (mapClick)="mapclick($event)" style="height: 400px;">

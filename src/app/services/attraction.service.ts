@@ -10,19 +10,31 @@ import 'rxjs/add/operator/do';
 @Injectable()
 export class AttractionService {
 
-  museums: Museum[] = [];
   attractions: Attraction[] = [];
   private url = environment.apiUrl;
 
   constructor(private http: HttpClient) {
   }
 
-  getCityAttractions(): Observable<Attraction[]> {
-    return this.http.get<Attraction[]>(this.url + 'attractionc')
-      .do(res => {
-        console.log(res);
-        this.attractions = res;
-      });
+  getCityAttractions(): Observable<any> {
+    if (this.attractions.length === 0) {
+      this.http.get<Attraction[]>(this.url + 'attractionc')
+        .subscribe(res => {
+          console.log(res);
+          for (const att of res) {
+            this.attractions.push(att);
+          }
+          return new Observable((observer) => {
+            observer.next(this.attractions);
+            observer.complete();
+          });
+        });
+    }
+    return new Observable((observer) => {
+      observer.next(this.attractions);
+      observer.complete();
+    });
+
   }
 
   addCityAttraction(attraction: Attraction): Observable<Attraction> {
@@ -48,31 +60,34 @@ export class AttractionService {
   }
 
   deleteCityAttraction(id: Number) {
-    return this.http.delete(this.url + 'attractionc/' + id)
-      .do(res => {
+    this.http.delete(this.url + 'attractionc/' + id)
+      .subscribe(res => {
         console.log(res);
         const index = this.attractions.findIndex(i => i.id === id);
         this.attractions = this.attractions.splice(index, 1);
+      }, error => {
+        console.error(error);
       });
   }
 
-  getMuseums(): Observable<Museum[]> {
-    return this.http.get<Museum[]>(this.url + 'museums');
-  }
-
-  addMuseum(museum: Museum) {
-    this.http.post(this.url + 'museums', museum).subscribe((res) => { console.log(res); });
-  }
-
-  getMuseum(id: number): Observable<Museum> {
-    return this.http.get<Museum>(this.url + 'museums/' + id);
-  }
-
-  editMuseum(museum: Museum) {
-    this.http.put(this.url + 'museums/' + museum.id, museum).subscribe();
-  }
-
-  deleteMuseum(museum: Museum) {
-    this.http.delete(this.url + 'museums/' + museum.id).subscribe();
+  createCityAttraction(attraction: Attraction, file: File): Observable<any> {
+    if (file == null) {
+      console.log('Mnnaggiadio');
+      return null;
+    }
+    const form: FormData = new FormData();
+    Object.keys(attraction).forEach(e => {
+      let value = attraction[e];
+      if (typeof attraction[e] !== 'string') {
+        value = value.toString();
+      }
+      form.append(e, value);
+    });
+    form.append('picture', file);
+    console.log(form);
+    return this.http.post(this.url + 'attractionc', form)
+      .do(attr => {
+        this.attractions.push(attr as Attraction);
+      });
   }
 }

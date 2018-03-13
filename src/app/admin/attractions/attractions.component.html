@@ -3,30 +3,60 @@
     <h3 class="panel-title">Attrazioni all'aperto</h3>
   </div>
   <div class="form-group" style="margin:20px">
-    <label for="search" style="float:left">Cerca attrazione</label>
+    <label for="search" style="float:left">Filtra attrazione</label>
     <input type="text" name="search" class="form-control" [(ngModel)]="searchString" />
   </div>
+  <div align="center">
+    <button class="btn btn-sm btn-primary" [routerLink]="['new']">
+      <span class="glyphicon glyphicon-plus"></span> Aggiungi nuova attrazione</button>
+  </div>
   <div *ngIf="attractions.length > 0" style="margin:20px;overflow:auto;">
-    <table class="table table-hover">
+    <!-- <ngx-datatable class="bootstrap" [columnMode]="'flex'" [rows]="attractions" [limit]="10">
+      <ngx-datatable-column name="Nome" prop="name" [flexGrow]="2">
+        <ng-template let-value="value" ngx-datatable-cell-template>
+          {{value}}
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="Categoria" prop="category" [flexGrow]="2">
+        <ng-template let-value="value" ngx-datatable-cell-template>
+          {{value}}
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="Azioni" [flexGrow]="1">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          <button class="btn btn-xs btn-warning" [routerLink]="[row.id]">
+            <span class="glyphicon glyphicon-edit"></span>
+            Modifica
+          </button>
+          <button class="btn btn-xs btn-danger" (click)="delete(row)">
+            <span class="glyphicon glyphicon-trash"></span>
+            Elimina
+          </button>
+        </ng-template>
+      </ngx-datatable-column>
+    </ngx-datatable> -->
+    <table class="table table-hover table-bordered table-striped">
       <thead>
         <tr>
-          <th>Nome</th>
+          <th class="text-center">Nome</th>
+          <th class="text-center">Categoria</th>
+          <th class="text-center">Azioni</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let attraction of attractions | myfilter: searchString" (click)="select(attraction)" [ngClass]="{'info': attraction == selectedAttraction, 'default': attraction != selectedAttraction}">
-          <td>{{ attraction['name'] }}
-            <td>
-              <td align="right">
-                <button class="btn btn-xs btn-warning" [routerLink]="[attraction['id']]">
-                  <span class="glyphicon glyphicon-edit"></span>
-                  Modifica
-                </button>
-                <button class="btn btn-xs btn-danger" (click)="delete(attraction)">
-                  <span class="glyphicon glyphicon-trash"></span>
-                  Elimina
-                </button>
-              </td>
+          <td align="center">{{ attraction['name'] }}</td>
+          <td align="center">{{ attraction['category'] }}</td>
+          <td align="center">
+            <button class="btn btn-xs btn-warning" [routerLink]="[attraction['id']]">
+              <span class="glyphicon glyphicon-edit"></span>
+              Modifica
+            </button>
+            <button class="btn btn-xs btn-danger" (click)="delete(attraction)">
+              <span class="glyphicon glyphicon-trash"></span>
+              Elimina
+            </button>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -36,8 +66,4 @@
     <div *ngIf="loading" class="loader">
     </div>
   </div>
-</div>
-
-<div align="center">
-  <button class="btn btn-primary" [routerLink]="['new']">Aggiungi nuova attrazione</button>
 </div>

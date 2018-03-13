@@ -5,8 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import {HttpClientModule} from '@angular/common/http';
-import { ImageUploadModule } from 'angular2-image-upload';
 import { AgmCoreModule } from '@agm/core';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import {MainPipe} from '../../pipe/main-pipe.module';
 // Components
 import {AttractionsComponent} from './attractions.component';
@@ -23,12 +23,12 @@ import {AttractionService} from '../../services/attraction.service';
   ],
   imports: [
     CommonModule,
+    NgxDatatableModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
     RouterModule,
     AgmCoreModule.forRoot({apiKey: 'AIzaSyAqY3G_iymwda5bn9g87a4YwDPWu13gnw0'}),
-    ImageUploadModule.forRoot(),
     MainPipe
     ],
     exports: [

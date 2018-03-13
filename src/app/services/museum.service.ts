@@ -47,8 +47,8 @@ export class MuseumService {
       return this.http.put(this.url + 'museums/' + museum.id, museum);
   }
 
-  deleteMuseum(museum: Museum) {
-      this.http.delete(this.url + 'museums/' + museum.id).subscribe();
+  deleteMuseum(museum: Museum): Observable<any> {
+      return this.http.delete(this.url + 'museums/' + museum.id);
   }
 
   createAttraction(attraction: MuseumAttraction, file: File, room_id: number): Observable<any> {

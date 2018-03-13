@@ -55,15 +55,13 @@ export class AddMuseumComponent implements OnInit {
     }
 
     addMuseum() {
-        this.newRoomButton = 'shown';
-        this.museum.name = this.museumName;
-        this.museumNameDisabled = true;
         this.museumService.createMuseum(this.museumName)
             .subscribe(res => {
+                console.log(res);
                 this.museum.id = res.id;
-                this.museum.rooms.forEach(room => {
-                    this.rms.push({ id: room.id, text: room.name });
-                });
+                this.newRoomButton = 'shown';
+                this.museum.name = this.museumName;
+                this.museumNameDisabled = true;
             });
     }
 
@@ -80,6 +78,7 @@ export class AddMuseumComponent implements OnInit {
                 console.log(res);
                 room.id = res.id;
                 this.museum.rooms.push(room);
+                this.rms.push({ id: room.id, text: room.name });
             });
         this.roomName = '';
         this.newRoomForm = false;

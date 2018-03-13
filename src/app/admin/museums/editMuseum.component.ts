@@ -62,11 +62,12 @@ export class EditMuseumComponent implements OnInit {
     ngOnInit(): void {
         this.route.paramMap
             .switchMap((params: ParamMap) =>
-                this.service.getMuseum(+params.get('id')))
+                this.museumService.getMuseum(+params.get('id')))
             .subscribe(museum => {
                 console.log(museum);
                 this.museum = museum;
                 this.museumCopy = Object.assign({}, this.museum);
+                console.log(this.museumCopy);
                 this.museumCopy.rooms.forEach(room => {
                     this.rms.push({ id: room.id, text: room.name });
                 });
@@ -103,6 +104,7 @@ export class EditMuseumComponent implements OnInit {
                 console.log(res);
                 room.id = res.id;
                 this.museum.rooms.push(room);
+                this.rms.push({ id: room.id, text: room.name });
             });
         this.roomName = '';
         this.newRoomForm = false;

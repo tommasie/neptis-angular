@@ -1,8 +1,10 @@
 <div align="center">
     <h1>Aggiunta di una nuova attrazione</h1>
+    <p>Inserire il nome, la categoria, una breve descrizione dell'attrazione, una sua foto
+         ed i dati necessari alla sua geolocalizzazione</p>
 </div>
 
-<form #form="ngForm" [formGroup]="attractionForm">
+<form [formGroup]="attractionForm">
     <div class="form-group">
         <label for="name" style="float:left">Nome</label>
         <input formControlName="name" name="name" type="text" class="form-control" />
@@ -29,14 +31,25 @@
     </div>
 
     <div class="form-group" style="margin-top:20px">
-        <label for="description" style="float:left">Descrizione (opzionale)</label>
+        <label for="description" style="float:left">Descrizione</label>
         <textarea placeholder="Aggiungi una descrizione dell'attrazione" formControlName="description" name="description" class="form-control">
         </textarea>
     </div>
 
+    <!-- <h5>Immagine</h5>
+    <div class="input-group">
+        <label class="input-group-btn">
+            <span class="btn btn-info">
+                Foto dell'attrazione&hellip;
+                <input type="file" name="picture" accept="image/jpeg, image/png" (change)="getFile($event)" style="display: none;">
+            </span>
+        </label>
+        <input type="text" class="form-control" readonly>
+    </div> -->
+
     <div class="form-group" style="margin-top:20px">
         <label for="picture" style="float:left">Immagine</label>
-        <input type="file" name="picture" accept="image/jpeg, image/png" (change)="onFileChange($event)" class="form-control">
+        <input type="file" name="picture" accept="image/jpeg, image/png" (change)="getFile($event)" class="form-control">
     </div>
     <p align="center"> Seleziona il sito dell'attrazione sulla mappa e aggiustane i confini tenendo premuto sulla circonferenza e trascinando
         il mouse </p>
@@ -45,7 +58,7 @@
         <agm-circle [latitude]="circ.lat" [longitude]="circ.lng" [radius]="circ.radius" [editable]="true" (radiusChange)="rChange(circ, $event)"></agm-circle>
     </agm-map>
     <div align="center" style="margin-top:20px;">
-        <button class="btn btn-success" (click)="finish()">Aggiungi</button>
+        <button class="btn btn-success" (click)="finish()" [disabled]="attractionForm.invalid">Aggiungi</button>
         <button class="btn btn-danger" [routerLink]="['/home','attractions']">Annulla</button>
     </div>
 </form>

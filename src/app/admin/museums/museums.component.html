@@ -14,7 +14,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let museum of museums" (click)="select(museum)" [ngClass]="{'info': museum == selectedAttraction, 'default': museum != selectedAttraction}">
+        <tr *ngFor="let museum of museums" [ngClass]="{'info': museum == selectedAttraction, 'default': museum != selectedAttraction}">
           <td>{{ museum['name'] }}
             <td>
               <td align="right">
@@ -22,7 +22,7 @@
                   <span class="glyphicon glyphicon-edit"></span>
                   Modifica
                 </button>
-                <button class="btn btn-xs btn-danger">
+                <button class="btn btn-xs btn-danger" (click)="delete(museum)">
                   <span class="glyphicon glyphicon-trash"></span>
                   Elimina
                 </button>

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AttractionService } from '../../services/attraction.service';
-
+import { MuseumService } from '../../services/museum.service';
 import { GoogleMapsAPIWrapper } from '@agm/core';
 import { Attraction } from '../../model/attraction';
 import { Museum } from '../../model/museum';
@@ -22,14 +22,15 @@ export class HomeComponent implements OnInit {
     zoom = 5;
     map: any;
 
-    constructor(private service: AttractionService) { }
+    constructor(private attractionService: AttractionService,
+        private museumService: MuseumService) { }
 
     ngOnInit() {
         this.load();
     }
 
     load(): void {
-        this.service.getCityAttractions().subscribe(data => {
+        this.attractionService.getCityAttractions().subscribe(data => {
             this.attractions = data;
             if (this.attractions.length > 0) {
                 let latTmp = 0;
@@ -52,7 +53,7 @@ export class HomeComponent implements OnInit {
             }
 
         });
-        this.service.getMuseums().subscribe(data => { this.museums = data; });
+        this.museumService.getMuseums().subscribe(data => { this.museums = data; });
     }
 
     setLatLng(attraction): void {

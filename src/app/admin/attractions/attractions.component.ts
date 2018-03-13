@@ -20,6 +20,7 @@ export class AttractionsComponent implements OnInit {
     searchString: string;
 
     constructor(private service: AttractionService, private notification: NotificationService) {
+        this.attractions = service.attractions;
     }
 
     ngOnInit() {
@@ -29,7 +30,7 @@ export class AttractionsComponent implements OnInit {
     load(): void {
         this.loading = true;
         this.service.getCityAttractions().subscribe(data => {
-            this.attractions = this.service.attractions;
+            this.attractions = data;
             this.loading = false;
         });
     }
@@ -44,8 +45,7 @@ export class AttractionsComponent implements OnInit {
     delete(attraction: Attraction) {
         const result = confirm('Vuoi veramente eliminare l\'attrazione "' + attraction.name + '"?');
         if (result) {
-            this.service.deleteCityAttraction(attraction.id).subscribe(res => {
-            });
+            this.service.deleteCityAttraction(attraction.id);
         }
     }
 }

@@ -17,6 +17,9 @@ export class EditAttractionComponent implements OnInit {
     private latitude: number;
     private longitude: number;
 
+    private attractionFile;
+    private fileLoaded = false;
+
     readonly = true;
 
     constructor(private route: ActivatedRoute,
@@ -56,6 +59,22 @@ export class EditAttractionComponent implements OnInit {
     rChange(attraction, event) {
         console.log(attraction, event);
         this.attraction.radius = event;
+    }
+
+    getFile(event) {
+        // this.attraction.picture = event.target.files[0];
+        const file = event.target.files[0];
+        this.attractionFile = event.target.files[0];
+        this.fileLoaded = true;
+        const reader = new FileReader();
+
+        reader.onload = this._handleReaderLoaded.bind(this);
+        reader.readAsBinaryString(file);
+    }
+
+    _handleReaderLoaded(readerEvt) {
+        const binaryString = readerEvt.target.result;
+        // this.attraction.picture = btoa(binaryString);  // Converting binary string data.
     }
 
     finish() {

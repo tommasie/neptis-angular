@@ -8,7 +8,7 @@ import { Attraction } from '../../model/attraction';
 @Component({
     selector: 'app-admin-add-attraction',
     templateUrl: './addAttraction.component.html',
-    styleUrls: ['./attractions.component.css']
+    styleUrls: ['./addAttraction.component.css']
 })
 
 export class AddAttractionComponent implements OnInit {
@@ -18,19 +18,14 @@ export class AddAttractionComponent implements OnInit {
     lng = 12.4963;
     circ: Circle = new Circle();
     picture: File;
-    formData = new FormData();
 
     attractionFile: File = null;
+    fileLoaded = false;
     attractionForm: FormGroup;
 
     constructor(private service: AttractionService,
         private router: Router,
         private fb: FormBuilder) {
-        this.attractionForm = this.fb.group({
-            name: ['', [Validators.required]],
-            category: ['', Validators.required],
-            description: ''
-        });
     }
 
     ngOnInit() {
@@ -41,10 +36,6 @@ export class AddAttractionComponent implements OnInit {
         });
     }
 
-    select(attraction) {
-        console.log(attraction);
-    }
-
     mapclick(event) {
         this.circ = new Circle();
         this.circ.lat = +event.coords.lat;
@@ -52,31 +43,37 @@ export class AddAttractionComponent implements OnInit {
         this.circ.radius = 100;
     }
 
+    /**
+     * Event function fired when the circle's radius is changed
+     * @param c circle object
+     * @param value new radius value
+     */
     rChange(c, value) {
         this.circ.radius = value;
     }
 
-    onFileChange(event) {
-        if (event.target.files.length > 0) {
-            this.picture = event.target.files[0];
-            console.log(this.picture);
-            // this.form.get('avatar').setValue(file);
-        }
+    getFile(event) {
+        const file = event.target.files[0];
+        this.attractionFile = event.target.files[0];
+        this.fileLoaded = true;
     }
 
     finish() {
-        this.formData.set('name', this.attraction.name);
-        this.formData.set('latitude', this.circ.lat.toString());
-        this.formData.set('longitude', this.circ.lng.toString());
-        this.formData.set('radius', this.circ.radius.toString());
-        this.formData.set('description', this.attraction.description);
-        this.formData.set('picture', this.picture);
+        this.prepareAttractionData();
+        this.service.createCityAttraction(this.attraction, this.attractionFile)
+            .subscribe(attraction => {
+                this.router.navigate(['/home', 'attractions']);
+            });
+    }
+
+    private prepareAttractionData(): void {
+        const formModel = this.attractionForm.value;
+        this.attraction.name = formModel.name;
+        this.attraction.description = formModel.description;
+        this.attraction.category = formModel.category;
         this.attraction.latitude = this.circ.lat;
         this.attraction.longitude = this.circ.lng;
         this.attraction.radius = this.circ.radius;
-        this.service.addCityAttractionB(this.formData).subscribe(attraction => {
-            this.router.navigate(['/home', 'attractions']);
-        });
     }
 
     get name() { return this.attractionForm.get('name'); }

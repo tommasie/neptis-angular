@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Museum } from '../../model/museum';
-import { AttractionService } from '../../services/attraction.service';
+import { MuseumService } from '../../services/museum.service';
 @Component({
   selector: 'app-admin-museums',
   templateUrl: './museums.component.html',
@@ -9,16 +9,24 @@ import { AttractionService } from '../../services/attraction.service';
 
 export class MuseumsComponent implements OnInit {
 
-  museums: Museum[];
+  museums: Museum[] = [];
   searchString: string;
 
-  constructor(private service: AttractionService) { }
+  constructor(private service: MuseumService) { }
 
   ngOnInit() {
-    this.load();
+    this.service.getMuseums().subscribe(data => {
+      for (const museum of data) {
+        this.museums.push(museum);
+      }
+    });
   }
 
-  load(): void {
-    this.service.getMuseums().subscribe(data => { this.museums = data; });
+  delete(museum: Museum): void {
+    const result = confirm('Vuoi veramente eliminare il museo "' + museum.name + '"?');
+    if (result) {
+      // TODO
+      // this.service.deleteMuseum(museum).subscribe(res => {});
+    }
   }
 }

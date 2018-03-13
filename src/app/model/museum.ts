@@ -15,5 +15,4 @@ export class Museum {
     name: string;
     rooms: Room[] = [];
     start: Room;
-    end: Room;
 }
