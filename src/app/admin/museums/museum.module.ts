@@ -38,7 +38,8 @@ import { MuseumAttractionComponent } from './attraction/museumAttraction.compone
     EditMuseumComponent,
     MuseumAttractionComponent
   ],
-  providers: []
+  providers: [],
+  entryComponents: [MuseumAttractionComponent]
 })
 
 export class MuseumModule { }

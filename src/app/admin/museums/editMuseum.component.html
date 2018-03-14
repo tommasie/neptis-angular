@@ -1,5 +1,6 @@
 <div align="center">
-    <h1>Modifica del museo {{museumCopy.name}}</h1>
+    <h1>Modifica del museo</h1>
+    <h2>{{museumCopy.name}}</h2>
 </div>
 
 <div class="row">
@@ -20,13 +21,14 @@
         </form>
     </div>
 </div>
-<div class="row" *ngIf="newRoomButton">
+<div class="row" *ngIf="newRoomButton" style="margin-top:20px;">
     <div align="center">
-        <button class="btn btn-default" (click)="addSala()" *ngIf="newRoomButton" align="center">Aggiungi sale</button>
+        <button class="btn btn-default" (click)="newRoomForm=!newRoomForm" *ngIf="newRoomButton" align="center">
+            <span class="glyphicon glyphicon-plus-sign"></span>&nbsp;Aggiungi sale</button>
     </div>
 </div>
 
-<div class="row" *ngIf="newRoomForm">
+<div class="row" *ngIf="newRoomForm" style="margin-top:20px;">
     <div class="col-md-12">
         <label for="name">Nome sala</label>
         <div class="input-group">
@@ -40,7 +42,7 @@
         </div>
     </div>
 </div>
-<div class="row" *ngIf="newAttractionForm" (created)="attractionCreated($event)">
+<div class="row" *ngIf="newAttractionForm" (created)="attractionCreated($event)" style="margin-top:20px;">
     <!-- <admin-museum-attraction [selectedArea]="selectedArea"></admin-museum-attraction> -->
     <div class="panel panel-primary">
         <div class="panel-heading">
@@ -77,10 +79,6 @@
                     <label for="picture">Immagine</label>
                     <input type="file" class="form-control-file" name="picture" (change)="getFile($event)">
                 </div>
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox"> Remember me</label>
-                </div>
                 <div align="center">
                     <button type="submit" class="btn btn-success" [disabled]="attractionForm.invalid">Aggiungi</button>
                     <button type="button" class="btn btn-danger" (click)="cancelNewAttraction()">Annulla</button>
@@ -90,7 +88,7 @@
     </div>
 
 </div>
-<div class="row">
+<div class="row" style="margin-top:20px;">
     <form #forrm="ngForm">
         <div *ngFor="let area of museum.rooms" class="panel-group" id="accordion">
             <div class="panel panel-primary">
@@ -116,13 +114,14 @@
                                     Attrazioni
                                 </h4>
                                 <div align="right">
-                                    <button class="btn btn-default btn-xs" (click)="showNewAttractionForm(area)">
+                                    <button class="btn btn-default btn-xs" (click)="modalOpen(area)">
+                                        <!-- <button class="btn btn-default btn-xs" (click)="showNewAttractionForm(area)"> -->
                                         <span class="glyphicon glyphicon-plus-sign"></span> Aggiungi attrazione
                                     </button>
                                 </div>
                             </div>
                             <div class="panel-body">
-                                <table class="table" *ngIf="area.attraction_ms.length !=0; else elseBlock">
+                                <table class="table" *ngIf="area.attraction_ms.length !=0; else attractionsElse">
                                     <tr>
                                         <th>Nome</th>
                                         <th>Categoria</th>
@@ -135,14 +134,14 @@
                                                 <span class="glyphicon glyphicon-edit"></span>
                                                 Modifica
                                             </button>
-                                            <button class="btn btn-xs btn-danger" (click)="deleteAttraction(attraction)">
+                                            <button class="btn btn-xs btn-danger" (click)="deleteAttraction(area,attraction)">
                                                 <span class="glyphicon glyphicon-trash"></span>
                                                 Elimina
                                             </button>
                                         </td>
                                     </tr>
                                 </table>
-                                <ng-template #elseBlock>
+                                <ng-template #attractionsElse>
                                     <p align="center">Nessuna attrazione in {{area.name}}</p>
                                 </ng-template>
                             </div>
@@ -155,26 +154,20 @@
                                     Sale adiacenti
                                 </h4>
                                 <div align="right">
-                                    <button class="btn btn-default btn-xs" (click)="showNewAdjacencyForm(area)">
+                                    <button class="btn btn-default btn-xs" (click)="newAdjacencyForm=!newAdjacencyForm">
                                         <span class="glyphicon glyphicon-plus-sign"></span> Aggiungi sala
                                     </button>
                                 </div>
                             </div>
                             <div class="panel-body">
-                                <!-- <div *ngIf="area.adjacent.length !=0; else elseBlock"> -->
-                                <div>
-                                    <table class="table" *ngIf="area.attraction_ms.length !=0; else elseBlock">
-                                        <tr *ngFor="let adj of area.adjacent">
-                                            <td>{{adj.name}}</td>
-                                            <!--<td align="right">
-                                            <button class="btn btn-xs btn-danger" >
-                                              <span class="glyphicon glyphicon-trash"></span>
-                                              Elimina
-                                            </button>
-                                        </td> -->
-                                        </tr>
-                                    </table>
+                                <div *ngIf="area.adjacent.length !=0; else elseBlock">
+                                    <button class="btn btn-danger" style="margin-right:5px;" *ngFor="let adj of area.adjacent" (click)="removeAdjacency(area, adj)">
+                                        <span>{{adj.name}}</span>
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                    </button>
+
                                 </div>
+
                                 <ng-template #elseBlock>
                                     <p align="center">Nessuna sala adiacente a {{area.name}}</p>
                                 </ng-template>

@@ -2,9 +2,23 @@
   <div class="panel-heading">
     <h3 class="panel-title">Musei</h3>
   </div>
-  <div class="form-group" style="margin:20px">
-    <label for="search" style="float:left">Cerca museo</label>
+
+  <div class="col-md-10 col-md-offset-1">
+    <div class="input-group" style="margin:20px">
+      <span class="input-group-addon info">
+        <span class="glyphicon glyphicon-filter"></span>
+        Filtra museo
+      </span>
+      <input type="text" name="search" class="form-control" [(ngModel)]="searchString" />
+    </div>
+  </div>
+  <!-- <div class="form-group" style="margin:20px">
+    <label for="search" style="float:left">Filtra museo</label>
     <input type="text" name="search" class="form-control" [(ngModel)]="searchString" />
+  </div> -->
+  <div align="center" >
+    <button class="btn btn-sm btn-primary" [routerLink]="['new']">
+      <span class="glyphicon glyphicon-plus"></span> Aggiungi nuovo museo</button>
   </div>
   <div style="margin:20px;overflow:auto;">
     <table class="table table-hover" *ngIf="museums.length != 0; else museumElse">
@@ -31,11 +45,7 @@
       </tbody>
     </table>
     <ng-template #museumElse>
-      <p align="center">Nessuna museo inserito</p>
+      <p align="center">Nessun museo inserito</p>
     </ng-template>
   </div>
-</div>
-
-<div align="center">
-  <button class="btn btn-primary" [routerLink]="['new']">Aggiungi nuovo museo</button>
 </div>

@@ -1,10 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
-import { AttractionService } from '../../services/attraction.service';
 import { MuseumService } from '../../services/museum.service';
 import { Museum, Room } from '../../model/museum';
 import { MuseumAttraction } from '../../model/attraction';
+
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
+import { MuseumAttractionComponent } from './attraction/museumAttraction.component';
+
 @Component({
     selector: 'app-admin-add-museum',
     animations: [
@@ -37,25 +41,28 @@ export class AddMuseumComponent implements OnInit {
     newRoomButton = 'hidden';
     newRoomForm = false;
     startingRoom = false;
+    startingRoomCheckbox = true;
     newAttractionForm = false;
     newAdjacencyForm = false;
     fileLoaded = false;
 
-    selectedAdjacency: object;
+    selectedAdjacency: any;
 
     // FormGroups
     attractionForm: FormGroup;
 
+    bsModalRef: BsModalRef;
+
     constructor(private fb: FormBuilder,
-        private service: AttractionService,
-        private museumService: MuseumService) { }
+        private service: MuseumService,
+        private modalService: BsModalService) { }
 
     ngOnInit(): void {
 
     }
 
-    addMuseum() {
-        this.museumService.createMuseum(this.museumName)
+    createMuseum() {
+        this.service.createMuseum(this.museumName)
             .subscribe(res => {
                 console.log(res);
                 this.museum.id = res.id;
@@ -65,7 +72,7 @@ export class AddMuseumComponent implements OnInit {
             });
     }
 
-    addSala() {
+    toggleAddRoomForm() {
         this.newRoomForm = true;
     }
 
@@ -73,7 +80,7 @@ export class AddMuseumComponent implements OnInit {
         const room: Room = new Room();
         room.name = this.roomName;
         room.starting = this.startingRoom;
-        this.museumService.createRoom(room, this.museum.id)
+        this.service.createRoom(room, this.museum.id)
             .subscribe(res => {
                 console.log(res);
                 room.id = res.id;
@@ -82,10 +89,8 @@ export class AddMuseumComponent implements OnInit {
             });
         this.roomName = '';
         this.newRoomForm = false;
-    }
-
-    showNewAdjacencyForm(room) {
-        this.newAdjacencyForm = true;
+        this.startingRoomCheckbox = false;
+        this.startingRoom = false;
     }
 
     selected(room) {
@@ -97,17 +102,38 @@ export class AddMuseumComponent implements OnInit {
     }
 
     addAdjacency(room) {
-        room.adjacent.push(this.selectedAdjacency);
-        this.museumService.addAdjacency(room, this.selectedAdjacency, this.museum.id)
+        this.service.addAdjacency(room, this.selectedAdjacency, this.museum.id)
             .subscribe(res => {
                 console.log(res);
                 this.newAdjacencyForm = false;
+                this.museum.rooms.forEach(e => {
+                    if (e.id === this.selectedAdjacency.id) {
+                        room.adjacent.push(e);
+                    }
+                });
+                this.selectedAdjacency = null;
             });
-        this.selectedAdjacency = null;
     }
 
+    removeAdjacency(room, adj) {
+        const result = confirm('Vuoi rimuovere la sala ' + adj.name + ' dalle adiacenze della sala ' + room.name + '?');
+        if (result) {
+            console.log(room);
+            console.log(adj);
+            this.service.removeAdjacency(room, adj)
+            .subscribe(res => {
+                console.log(res);
+                room. adjacent = room.adjacent.filter(r => {
+                    return r.id !== adj.id;
+                });
+                this.selectedAdjacency = null;
+            });
+        }
+
+    }
+
+    // TODO try modal for new attraction form
     showNewAttractionForm(area) {
-        this.selectedArea = area;
         this.newAttractionForm = true;
         this.selectedArea = area;
         this.attraction = new MuseumAttraction();
@@ -125,7 +151,7 @@ export class AddMuseumComponent implements OnInit {
             category: model.category as string,
             description: model.description as string
         };
-        this.museumService.createAttraction(attraction, this.attractionFile, this.selectedArea.id)
+        this.service.createAttraction(attraction, this.attractionFile, this.selectedArea.id)
             .subscribe(res => {
                 console.log(res);
                 attraction.id = res.id;
@@ -141,19 +167,23 @@ export class AddMuseumComponent implements OnInit {
     }
 
     getFile(event) {
-        // this.attraction.picture = event.target.files[0];
         const file = event.target.files[0];
         this.attractionFile = event.target.files[0];
         this.fileLoaded = true;
-        const reader = new FileReader();
-
-        reader.onload = this._handleReaderLoaded.bind(this);
-        reader.readAsBinaryString(file);
     }
 
-    _handleReaderLoaded(readerEvt) {
-        const binaryString = readerEvt.target.result;
-        // this.attraction.picture = btoa(binaryString);  // Converting binary string data.
+    deleteAttraction(area, attraction) {
+        console.log(attraction);
+        if (confirm('Si è certi di voler rimuovere l\'attrazione ' + attraction.name + '?')) {
+            this.service.deleteAttraction(attraction.id).subscribe(() => {
+                console.log('deleted');
+                area.attraction_ms = area.attraction_ms.filter(attr => {
+                    return attr.id !== attraction.id;
+                });
+            }, err => {
+                console.error(err);
+            });
+        }
     }
 
     selectArea(area: Room) {
@@ -173,6 +203,13 @@ export class AddMuseumComponent implements OnInit {
             array.push(room.name);
         }
         return array;
+    }
+
+    modalOpen(area) {
+        const initialState = {
+            selectedArea: area
+        };
+        this.bsModalRef = this.modalService.show(MuseumAttractionComponent, { initialState });
     }
 
     get name() { return this.attractionForm.get('name'); }

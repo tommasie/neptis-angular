@@ -10,6 +10,10 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from './interceptors/token.interceptor';
 import { AgmCoreModule } from '@agm/core';
 import { AlertModule } from 'ngx-bootstrap/alert';
+import { ModalModule } from 'ngx-bootstrap/modal';
+// import { ModalModule } from 'ngx-modialog';
+// import { BootstrapModalModule } from 'ngx-modialog/plugins/bootstrap';
+
 
 import { AppComponent } from './app.component';
 import { AuthenticationService } from './services/authentication.service';
@@ -34,6 +38,7 @@ import { environment } from '../environments/environment';
     FormsModule,
     HttpClientModule,
     AlertModule.forRoot(),
+    ModalModule.forRoot(),
     AgmCoreModule.forRoot({ apiKey: 'AIzaSyAqY3G_iymwda5bn9g87a4YwDPWu13gnw0' }),
     LoginModule,
     AdminModule,

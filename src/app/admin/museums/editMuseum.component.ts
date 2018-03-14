@@ -1,12 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import 'rxjs/add/operator/switchMap';
-import { AttractionService } from '../../services/attraction.service';
 import { MuseumService } from '../../services/museum.service';
 import { Museum, Room } from '../../model/museum';
 import { MuseumAttraction } from '../../model/attraction';
+
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
+import { MuseumAttractionComponent } from './attraction/museumAttraction.component';
 
 @Component({
     selector: 'app-admin-edit-museum',
@@ -47,28 +50,31 @@ export class EditMuseumComponent implements OnInit {
     newAdjacencyForm = false;
     fileLoaded = false;
 
-    selectedAdjacency: object;
+    selectedAdjacency;
 
     // FormGroups
     attractionForm: FormGroup;
 
+    bsModalRef: BsModalRef;
+
     constructor(private route: ActivatedRoute,
         private router: Router,
         private fb: FormBuilder,
-        private service: AttractionService,
-        private museumService: MuseumService) { }
+        private service: MuseumService,
+        private modalService: BsModalService) { }
 
 
     ngOnInit(): void {
         this.route.paramMap
             .switchMap((params: ParamMap) =>
-                this.museumService.getMuseum(+params.get('id')))
+                this.service.getMuseum(+params.get('id')))
             .subscribe(museum => {
                 console.log(museum);
                 this.museum = museum;
                 this.museumCopy = Object.assign({}, this.museum);
                 console.log(this.museumCopy);
                 this.museumCopy.rooms.forEach(room => {
+                    console.log(room);
                     this.rms.push({ id: room.id, text: room.name });
                 });
             });
@@ -84,14 +90,14 @@ export class EditMuseumComponent implements OnInit {
     }
 
     editMuseum() {
-        this.museumService.editMuseum(this.museumCopy)
+        this.service.editMuseum(this.museumCopy)
             .subscribe(res => {
                 console.log(res);
                 this.museumNameDisabled = true;
             });
     }
 
-    addSala() {
+    toggleAddRoomForm() {
         this.newRoomForm = true;
     }
 
@@ -99,7 +105,7 @@ export class EditMuseumComponent implements OnInit {
         const room: Room = new Room();
         room.name = this.roomName;
         room.starting = this.startingRoom;
-        this.museumService.createRoom(room, this.museum.id)
+        this.service.createRoom(room, this.museum.id)
             .subscribe(res => {
                 console.log(res);
                 room.id = res.id;
@@ -108,10 +114,6 @@ export class EditMuseumComponent implements OnInit {
             });
         this.roomName = '';
         this.newRoomForm = false;
-    }
-
-    showNewAdjacencyForm(room) {
-        this.newAdjacencyForm = true;
     }
 
     selected(room) {
@@ -123,13 +125,34 @@ export class EditMuseumComponent implements OnInit {
     }
 
     addAdjacency(room) {
-        room.adjacent.push(this.selectedAdjacency);
-        this.museumService.addAdjacency(room, this.selectedAdjacency, this.museum.id)
+        this.service.addAdjacency(room, this.selectedAdjacency, this.museum.id)
             .subscribe(res => {
                 console.log(res);
                 this.newAdjacencyForm = false;
+                this.museum.rooms.forEach(e => {
+                    if (e.id === this.selectedAdjacency.id) {
+                        room.adjacent.push(e);
+                    }
+                });
+                this.selectedAdjacency = null;
             });
-        this.selectedAdjacency = null;
+    }
+
+    removeAdjacency(room, adj) {
+        const result = confirm('Vuoi rimuovere la sala ' + adj.name + ' dalle adiacenze della sala ' + room.name + '?');
+        if (result) {
+            console.log(room);
+            console.log(adj);
+            this.service.removeAdjacency(room, adj)
+                .subscribe(res => {
+                    console.log(res);
+                    room.adjacent = room.adjacent.filter(r => {
+                        return r.id !== adj.id;
+                    });
+                    this.selectedAdjacency = null;
+                });
+        }
+
     }
 
     deleteRoom(area) {
@@ -158,7 +181,7 @@ export class EditMuseumComponent implements OnInit {
             category: model.category as string,
             description: model.description as string
         };
-        this.museumService.createAttraction(attraction, this.attractionFile, this.selectedArea.id)
+        this.service.createAttraction(attraction, this.attractionFile, this.selectedArea.id)
             .subscribe(res => {
                 console.log(res);
                 attraction.id = res.id;
@@ -195,7 +218,7 @@ export class EditMuseumComponent implements OnInit {
             category: model.category as string,
             description: model.description as string
         };
-        this.museumService.editAttraction(attraction, this.attractionFile)
+        this.service.editAttraction(attraction, this.attractionFile)
             .subscribe(res => {
                 console.log(res);
                 attraction.id = res.id;
@@ -210,36 +233,24 @@ export class EditMuseumComponent implements OnInit {
         this.attraction = null;
     }
 
-    deleteAttraction(attraction) {
+    deleteAttraction(area, attraction) {
         console.log(attraction);
         if (confirm('Si è certi di voler rimuovere l\'attrazione ' + attraction.name + '?')) {
-            this.museumService.deleteAttraction(attraction.id).subscribe(res => {
-                this.museum.rooms.forEach((room, i) => {
-                    room.attraction_ms.forEach((attr: MuseumAttraction, j) => {
-                        if (attr.id === attraction.id) {
-                            room.attraction_ms.slice(j, 1);
-                        }
-
-                    });
+            this.service.deleteAttraction(attraction.id).subscribe(() => {
+                console.log('deleted');
+                area.attraction_ms = area.attraction_ms.filter(attr => {
+                    return attr.id !== attraction.id;
                 });
+            }, err => {
+                console.error(err);
             });
         }
     }
 
     getFile(event) {
-        // this.attraction.picture = event.target.files[0];
         const file = event.target.files[0];
         this.attractionFile = event.target.files[0];
         this.fileLoaded = true;
-        const reader = new FileReader();
-
-        reader.onload = this._handleReaderLoaded.bind(this);
-        reader.readAsBinaryString(file);
-    }
-
-    _handleReaderLoaded(readerEvt) {
-        const binaryString = readerEvt.target.result;
-        // this.attraction.picture = btoa(binaryString);  // Converting binary string data.
     }
 
     selectArea(area: Room) {
@@ -261,6 +272,12 @@ export class EditMuseumComponent implements OnInit {
         return array;
     }
 
+    modalOpen(area) {
+        const initialState = {
+            selectedArea: area
+        };
+        this.bsModalRef = this.modalService.show(MuseumAttractionComponent, { initialState });
+    }
 
     get name() { return this.attractionForm.get('name'); }
     get cat() { return this.attractionForm.get('category'); }

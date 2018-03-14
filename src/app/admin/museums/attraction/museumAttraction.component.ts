@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms'
 import { MuseumService } from '../../../services/museum.service';
 import { Museum, Room } from '../../../model/museum';
 import { MuseumAttraction } from '../../../model/attraction';
+import { BsModalRef } from 'ngx-bootstrap/modal';
 @Component({
     selector: 'app-admin-museum-attraction',
     templateUrl: './museumAttraction.component.html',
@@ -11,13 +12,16 @@ import { MuseumAttraction } from '../../../model/attraction';
 
 export class MuseumAttractionComponent implements OnInit {
 
-    @Input() selectedArea: Room;
-    @Output() created: EventEmitter<boolean> = new EventEmitter<boolean>();
+    attractionFile: File = null;
+    fileLoaded: boolean;
+    selectedArea: Room = new Room();
 
     // FormGroups
     attractionForm: FormGroup;
 
-    constructor(private fb: FormBuilder, private museumService: MuseumService) { }
+    constructor(private bsModalRef: BsModalRef,
+        private fb: FormBuilder,
+        private service: MuseumService) { }
 
     ngOnInit(): void {
         this.attractionForm = this.fb.group({
@@ -29,20 +33,30 @@ export class MuseumAttractionComponent implements OnInit {
 
     createNewAttraction() {
         const model = this.attractionForm.value;
-        const attraction = {
+        const attraction: any = {
             name: model.name as string,
             category: model.category as string,
             description: model.description as string
         };
-        this.created.emit(true);
         console.log(attraction);
-        this.selectedArea.attraction_ms.push(attraction);
-        // this.onCreated.emit(true);
+        this.service.createAttraction(attraction, this.attractionFile, this.selectedArea.id)
+            .subscribe(res => {
+                console.log(res);
+                attraction.id = res.id;
+                this.selectedArea.attraction_ms.push(attraction);
+                this.bsModalRef.hide();
+            });
+        // this.selectedArea.attraction_ms.push(attraction);
     }
 
     cancel() {
-        console.log('gna');
-        this.created.emit(false);
+        this.bsModalRef.hide();
+    }
+
+    getFile(event) {
+        const file = event.target.files[0];
+        this.attractionFile = event.target.files[0];
+        this.fileLoaded = true;
     }
 
     /*getFile(event) {

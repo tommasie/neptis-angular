@@ -64,7 +64,7 @@ export class AttractionService {
       .subscribe(res => {
         console.log(res);
         const index = this.attractions.findIndex(i => i.id === id);
-        this.attractions = this.attractions.splice(index, 1);
+        this.attractions.splice(index, 1);
       }, error => {
         console.error(error);
       });

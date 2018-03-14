@@ -28,7 +28,7 @@
     "@swimlane/ngx-datatable": "^11.2.0",
     "angularfire2": "5.0.0-rc.3",
     "body-parser": "^1.18.2",
-    "bootstrap": "^3.3.7",
+    "bootstrap": "3.3.7",
     "bootstrap-validator": "^0.11.9",
     "core-js": "^2.5.3",
     "cors": "^2.8.4",
