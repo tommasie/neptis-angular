@@ -4,7 +4,7 @@
 		<h1>
 			<b>
 				<img src="../assets/colosseo.png" style="width: 60px; height: 60px;">
-				Neptis Planner
+				NEPTIS Planner
 			</b>
 		</h1>
 	</div>
@@ -13,16 +13,16 @@
    		<h4><b>Login</b></h4>
    	</div>
 
-    <form name="form" #f="ngForm" role="form" (ngSubmit)="click()">
+    <form name="form" [formGroup]="loginForm" #f="ngForm" role="form" (ngSubmit)="click()">
 
     	<div class="form-group">
             <label for="email" style="float:left">E-mail</label>
-            <input [(ngModel)]="email" name="email" type="text" id="email" class="form-control" required />
+            <input formControlName="email" name="email" type="email" class="form-control"/>
         </div>
 
     	<div class="form-group">
             <label for="password" style="float:left">Password</label>
-            <input [(ngModel)]="password" name="password" type="password" id="password" class="form-control" required />
+            <input formControlName="password" name="password" type="password" class="form-control"/>
         </div>
 
 		<div class="form-actions" style="margin-top: 50px;">

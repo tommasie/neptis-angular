@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {Router} from '@angular/router';
-import {AuthenticationService} from '../services/authentication.service';
+import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
   selector: 'app-login',
@@ -10,23 +11,35 @@ import {AuthenticationService} from '../services/authentication.service';
 
 export class LoginComponent implements OnInit {
 
-    email: string;
-    password: string;
-    loading = false;
+  email: string;
+  password: string;
+  loading = false;
 
-  constructor(private auth: AuthenticationService, private router: Router) {
-    }
+  loginForm: FormGroup;
+
+  constructor(private auth: AuthenticationService,
+    private router: Router,
+    private fb: FormBuilder) { }
 
   ngOnInit() {
+    this.loginForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+    });
   }
 
   click(): void {
-      this.loading = true;
-      this.auth.login2(this.email, this.password);
-  }
-
-  isValid(): boolean {
-      return this.email.length > 0 && this.password.length > 0;
+    const model = this.loginForm.value;
+    this.loading = true;
+    this.auth.login2(model.email, model.password)
+      .then(() => {
+        this.loading = false;
+        this.router.navigate(['/home']);
+      })
+      .catch(err => {
+        console.log(err);
+        this.loading = false;
+      });
   }
 
 }

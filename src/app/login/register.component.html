@@ -1,62 +1,63 @@
 <div class="container">
-	<div class="col-md-6 col-md-offset-3" align="center">
+  <div class="col-md-6 col-md-offset-3" align="center">
 
-		<div style="margin-top: 100px; margin-bottom: 20px;">
-			<h1 style="padding-right: 20px;">
-				<b>
-					<img src="../assets/colosseo.png" style="width: 60px; height: 60px;">
-					Neptis Planner
-				</b>
-			</h1>
-		</div>
+    <div style="margin-top: 100px; margin-bottom: 20px;">
+      <h1 style="padding-right: 20px;">
+        <b>
+          <img src="../assets/colosseo.png" style="width: 60px; height: 60px;"> NEPTIS Planner
+        </b>
+      </h1>
+    </div>
 
-		<div style="margin-bottom: 30px;">
-	   		<h4><b>Inserisci le informazioni richieste</b></h4>
-	   	</div>
+    <div style="margin-bottom: 30px;">
+      <h4>
+        <b>Inserisci le informazioni richieste</b>
+      </h4>
+    </div>
 
-	    <form name="form" #f="ngForm" role="form" (ngSubmit)="register()">
+    <form name="form" [formGroup]="registerForm" role="form" (ngSubmit)="register()">
 
-			<div class="row">
-				<div class="form-group col-md-6">
-			    	<label for="region" style="float:left">Regione</label>
-					<select class="form-control" [(ngModel)]="region" (ngModelChange)="onRegionSelected($event)" name="region" id="region">
-						<option *ngFor="let region of regions" [ngValue]="region">{{region}}</option>
-					</select>
-				</div>
-				<div class="form-group col-md-6">
-					<label for="city" style="float:left">Città</label>
-					<select class="form-control" [(ngModel)]="city" name="city" id="city">
-						<option *ngFor="let city of cityList" [ngValue]="city">{{city.nome + " (" + city.sigla + ")"}}</option>
-					</select>
-		    	</div>
-			</div>
+      <div class="row">
+        <div class="form-group col-md-6">
+          <label for="region" style="float:left">Regione</label>
+          <select class="form-control" formControlName="region" (ngModelChange)="onRegionSelected($event)" name="region">
+            <option *ngFor="let region of regions" [ngValue]="region">{{region}}</option>
+          </select>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="city" style="float:left">Città</label>
+          <select class="form-control" formControlName="city" (ngModelChange)="onCitySelected($event)" name="city">
+            <option *ngFor="let city of cityList" [ngValue]="city">{{city.nome + " (" + city.sigla + ")"}}</option>
+          </select>
+        </div>
+      </div>
 
+      <div class="form-group">
+        <label for="email" style="float:left">E-mail</label>
+        <input formControlName="email" type="email" name="email" class="form-control" />
+      </div>
 
-	    	<div class="form-group">
-	            <label for="email" style="float:left">E-mail</label>
-	            <input [(ngModel)]="email" #name="ngModel" type="email" name="email" id="email" class="form-control" required email/>
-	        </div>
+      <div class="form-group">
+        <label for="password" style="float:left">Password (minimo 6 caratteri con almeno una lettera e una cifra)</label>
+        <input formControlName="password" type="password" name="password" class="form-control" />
+      </div>
 
-	    	<div class="form-group" [ngClass]="{'has-error': !verifyPassword()}">
-	            <label for="password" style="float:left">Password (minimo 6 caratteri)</label>
-	            <input [(ngModel)]="password" type="password" name="password" id="password" class="form-control" required minlength="6"/>
-	        </div>
+      <div class="form-group">
+        <label for="repassword" style="float:left">Reinserisci Password</label>
+        <input formControlName="passwordConfirm" type="password" name="passwordConfirm" class="form-control" />
+      </div>
 
-	        <div class="form-group" [ngClass]="{'has-error': !verifyPassword()}">
-	            <label for="repassword" style="float:left">Reinserisci Password</label>
-	            <input [(ngModel)]="confirmPassword" type="password" name="confirmPassword" id="repassword" class="form-control" required minlength="6"/>
-	        </div>
+      <div class="form-actions" style="margin-top: 50px; ">
+        <button type="submit" [disabled]="!registerForm.valid" class="btn btn-primary">Registrati</button>
+        <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="
+        />
+      </div>
 
-	    	<div class="form-actions" style="margin-top: 50px; ">
-					<button type="submit" [disabled]="!f.valid" class="btn btn-primary">Registrati</button>
-					<img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
-	      </div>
+      <div class="form-actions">
+        <a [routerLink]="['/login']" class="btn btn-link">Annulla</a>
+      </div>
 
-	    	<div class="form-actions">
-	            <a [routerLink]="['/login']" class="btn btn-link">Annulla</a>
-	        </div>
+    </form>
 
-	    </form>
-
-	</div>
+  </div>
 </div>

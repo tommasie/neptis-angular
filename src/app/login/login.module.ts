@@ -2,6 +2,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AlertModule } from 'ngx-bootstrap/alert';
 // Components
@@ -21,6 +22,7 @@ import { RegisterService } from '../services/register.service';
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
     AlertModule.forRoot(),
     LoginRoutingModule,
