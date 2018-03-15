@@ -8,6 +8,7 @@ import { AgmCoreModule } from '@agm/core';
 import { SelectModule } from 'ng2-select';
 import { Ng2TableModule } from 'ng2-table/ng2-table';
 import { MainPipe } from '../../pipe/main-pipe.module';
+import { AccordionModule } from 'ngx-bootstrap/accordion';
 
 import { MuseumsComponent } from './museums.component';
 import { AddMuseumComponent } from './addMuseum.component';
@@ -27,6 +28,7 @@ import { MuseumAttractionComponent } from './attraction/museumAttraction.compone
     Ng2TableModule,
     FormsModule,
     ReactiveFormsModule,
+    AccordionModule.forRoot(),
     HttpClientModule,
     RouterModule,
     AgmCoreModule.forRoot({ apiKey: 'AIzaSyAqY3G_iymwda5bn9g87a4YwDPWu13gnw0' }),

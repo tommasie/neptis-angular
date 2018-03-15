@@ -73,6 +73,9 @@ export class EditMuseumComponent implements OnInit {
                 this.museum = museum;
                 this.museumCopy = Object.assign({}, this.museum);
                 console.log(this.museumCopy);
+                this.museum.rooms.sort((a, b) => {
+                    return a.id - b.id;
+                });
                 this.museumCopy.rooms.forEach(room => {
                     console.log(room);
                     this.rms.push({ id: room.id, text: room.name });
