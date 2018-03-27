@@ -16,7 +16,7 @@ export class AuthGuard implements CanActivate {
             // resolve(true);
             // let user = this.firebase.auth.currentUser;
             this.firebase.authState.subscribe(user => {
-                if (user != null) {
+                if (user != null && user.emailVerified) {
                     resolve(true);
                 } else {
                     this.router.navigate(['/login']);

@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
   click(): void {
     const model = this.loginForm.value;
     this.loading = true;
-    this.auth.login2(model.email, model.password)
+    this.auth.login(model.email, model.password)
       .then(() => {
         this.loading = false;
         this.router.navigate(['/home']);
@@ -40,6 +40,10 @@ export class LoginComponent implements OnInit {
         console.log(err);
         this.loading = false;
       });
+  }
+
+  resetPassword(): void {
+    // TODO add firebase code for pass reset
   }
 
 }

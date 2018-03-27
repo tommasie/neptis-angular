@@ -7,7 +7,7 @@ import { environment } from '../../environments/environment';
 @Injectable()
 export class RegisterService {
 
-    private url = environment.unprotectedUrl;
+    private url = environment.baseUrl;
     constructor(private http: HttpClient) {
     }
 

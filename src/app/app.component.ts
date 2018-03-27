@@ -23,11 +23,11 @@ export class AppComponent {
         private firebase: AngularFireAuth,
         public notification: NotificationService) {
         this.firebase.authState.subscribe(user => {
-            if (user == null) {
-                this.logged = false;
-            } else {
+            if (user != null && user.emailVerified) {
                 this.username = user.email;
                 this.logged = true;
+            } else {
+                this.logged = false;
             }
         });
 
@@ -38,7 +38,11 @@ export class AppComponent {
     }
 
     logout(): void {
-        this.auth.logout();
-        this.router.navigate(['/login']);
+        this.auth.logout()
+        .then(() => {
+            this.router.navigate(['/login']);
+        }).catch(err => {
+            console.log(err);
+        });
     }
 }

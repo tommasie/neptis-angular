@@ -5,7 +5,7 @@
 
 export const environment = {
     production: false,
-    unprotectedUrl: 'http://localhost:9070/',
+    baseUrl: 'http://localhost:9070/',
     apiUrl: 'http://localhost:9070/api/admin/',
     firebase: {
         apiKey: 'AIzaSyB_Ia57LlkZTjjzfEAse0XQaN35XOvxQak',

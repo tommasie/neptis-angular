@@ -73,13 +73,10 @@ export class RegisterComponent implements OnInit {
 
     register(): void {
         const model = this.registerForm.value;
-        console.log(model.region);
-        console.log(model.city);
-        console.log(model.email);
-        console.log(model.password);
-        this.auth.register2({
+        console.log(model);
+        this.auth.register({
             region: model.region,
-            city: model.city.name,
+            city: model.city.nome,
             email: model.email,
             password: model.password
         });
