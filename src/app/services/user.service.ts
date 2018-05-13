@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
+import { userInfo } from 'os';
 
 @Injectable()
 export class UserService {
@@ -22,6 +23,15 @@ export class UserService {
     }
 
     getToken() { return this.token; }
+
+    getUserToken() {
+        this.firebase.authState.subscribe(user => {
+            if (user) {
+                return user.getIdToken();
+            }
+            return null;
+        });
+    }
 
     setToken(token) { this.token = token; }
 
